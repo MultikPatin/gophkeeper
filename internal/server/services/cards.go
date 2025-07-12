@@ -5,10 +5,10 @@ import (
 )
 
 type CardsService struct {
-	db *interfaces.CardsRepository
+	db interfaces.CardsRepository
 }
 
-func NewCardsService(db *interfaces.CardsRepository) *CardsService {
+func NewCardsService(db interfaces.CardsRepository) *CardsService {
 	return &CardsService{
 		db: db,
 	}

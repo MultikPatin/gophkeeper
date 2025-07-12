@@ -11,13 +11,13 @@ import (
 	"path/filepath"
 )
 
-// PostgresDB encapsulates a SQL database connection for interacting with a PostgresSQL backend.
-type PostgresDB struct {
-	db *sql.DB // The active database connection.
+// DB encapsulates a SQL database connection for interacting with a PostgresSQL backend.
+type DB struct {
+	conn *sql.DB // The active database connection.
 }
 
-// NewPostgresDB establishes a new PostgresSQL database connection using provided credentials.
-func NewPostgresDB(dsn *url.URL) (*PostgresDB, error) {
+// NewDB establishes a new PostgresSQL database connection using provided credentials.
+func NewDB(dsn *url.URL) (*DB, error) {
 	host := dsn.Hostname()
 	port := dsn.Port()
 	user := dsn.User.Username()
@@ -32,14 +32,14 @@ func NewPostgresDB(dsn *url.URL) (*PostgresDB, error) {
 		return nil, err
 	}
 
-	return &PostgresDB{
-		db: db,
+	return &DB{
+		conn: db,
 	}, nil
 }
 
 // Close terminates the database connection cleanly.
-func (p *PostgresDB) Close() error {
-	err := p.db.Close()
+func (p *DB) Close() error {
+	err := p.conn.Close()
 	if err != nil {
 		return err
 	}
@@ -47,18 +47,18 @@ func (p *PostgresDB) Close() error {
 }
 
 // Ping verifies connectivity to the database by issuing a ping request.
-func (p *PostgresDB) Ping() error {
-	err := p.db.Ping()
+func (p *DB) Ping() error {
+	err := p.conn.Ping()
 	return err
 }
 
 // Migrate applies database schema migrations using the provided context and connection.
-func (p *PostgresDB) Migrate(migrationsPath string) error {
+func (p *DB) Migrate(migrationsPath string) error {
 	databaseName := "postgres"
 	sourceURL := "file://"
 
 	if migrationsPath == "" {
-		sourceURL += "db/migrations"
+		sourceURL += "conn/migrations"
 	} else {
 		path, err := filepath.Abs(migrationsPath)
 		if err != nil {
@@ -67,7 +67,7 @@ func (p *PostgresDB) Migrate(migrationsPath string) error {
 		sourceURL += path
 	}
 
-	driver, err := pm.WithInstance(p.db, &pm.Config{})
+	driver, err := pm.WithInstance(p.conn, &pm.Config{})
 	if err != nil {
 		return err
 	}

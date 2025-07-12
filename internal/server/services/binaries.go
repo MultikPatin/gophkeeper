@@ -5,10 +5,10 @@ import (
 )
 
 type BinariesService struct {
-	db *interfaces.BinariesRepository
+	db interfaces.BinariesRepository
 }
 
-func NewBinariesService(db *interfaces.BinariesRepository) *BinariesService {
+func NewBinariesService(db interfaces.BinariesRepository) *BinariesService {
 	return &BinariesService{
 		db: db,
 	}
