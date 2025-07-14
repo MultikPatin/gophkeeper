@@ -16,10 +16,10 @@ func NewBinariesRepository(db *DB) *BinariesRepository {
 	}
 }
 
-func (r *BinariesRepository) Get(ctx context.Context, title string) (*models.BinaryData, error) {
+func (r *BinariesRepository) Get(ctx context.Context, title string, owner int64) (*models.BinaryData, error) {
 	var result models.BinaryData
 
-	err := r.db.conn.QueryRowContext(ctx, stmt.binary.get, title).Scan(&result.ID, &result.Title, &result.Data)
+	err := r.db.conn.QueryRowContext(ctx, stmt.binary.get, title, owner).Scan(&result.ID, &result.Title, &result.Data)
 	if err != nil {
 		return nil, err
 	}

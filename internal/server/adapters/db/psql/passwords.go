@@ -16,10 +16,10 @@ func NewPasswordsRepository(db *DB) *PasswordsRepository {
 	}
 }
 
-func (r *PasswordsRepository) Get(ctx context.Context, title string) (*models.Password, error) {
+func (r *PasswordsRepository) Get(ctx context.Context, title string, owner int64) (*models.Password, error) {
 	var result models.Password
 
-	err := r.db.conn.QueryRowContext(ctx, stmt.password.get, title).Scan(&result.ID, &result.Title, &result.Login, &result.Password)
+	err := r.db.conn.QueryRowContext(ctx, stmt.password.get, title, owner).Scan(&result.ID, &result.Title, &result.Login, &result.Password)
 	if err != nil {
 		return nil, err
 	}

@@ -10,7 +10,7 @@ type Card struct {
 	ID         int64
 	Title      string
 	Bank       string
-	Owner      string
+	Owner      int64
 	Number     string
 	DataEnd    string
 	SecretCode string
@@ -19,7 +19,7 @@ type Card struct {
 type Password struct {
 	ID       int64
 	Title    string
-	Owner    string
+	Owner    int64
 	Login    string
 	Password string
 }
