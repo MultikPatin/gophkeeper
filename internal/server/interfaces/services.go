@@ -2,10 +2,10 @@ package interfaces
 
 type BinariesService interface {
 }
-
+type PasswordsService interface {
+}
 type CardsService interface {
 }
-type NotesService interface {
-}
+
 type UsersService interface {
 }

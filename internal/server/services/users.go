@@ -1,7 +1,12 @@
 package services
 
 import (
+	"errors"
 	"main/internal/server/interfaces"
+)
+
+var (
+	ErrUserAlreadyExists = errors.New("user already exists")
 )
 
 type UsersService struct {

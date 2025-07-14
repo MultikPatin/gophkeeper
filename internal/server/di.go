@@ -10,11 +10,11 @@ import (
 )
 
 type Services struct {
-	binaries interfaces.BinariesService
-	cards    interfaces.CardsService
-	notes    interfaces.NotesService
-	users    interfaces.UsersService
-	r        *Repositories
+	binaries  interfaces.BinariesService
+	passwords interfaces.PasswordsService
+	cards     interfaces.CardsService
+	users     interfaces.UsersService
+	r         *Repositories
 }
 
 func NewServices(c *config.Config, l *zap.SugaredLogger) (*Services, error) {
@@ -24,11 +24,11 @@ func NewServices(c *config.Config, l *zap.SugaredLogger) (*Services, error) {
 	}
 
 	return &Services{
-		binaries: services.NewBinariesService(r.binaries),
-		cards:    services.NewCardsService(r.cards),
-		notes:    services.NewNotesService(r.notes),
-		users:    services.NewUsersService(r.users),
-		r:        r,
+		binaries:  services.NewBinariesService(r.binaries),
+		passwords: services.NewPasswordsService(r.passwords),
+		cards:     services.NewCardsService(r.cards),
+		users:     services.NewUsersService(r.users),
+		r:         r,
 	}, nil
 }
 
@@ -41,11 +41,11 @@ func (s *Services) Close() error {
 }
 
 type Repositories struct {
-	binaries interfaces.BinariesRepository
-	cards    interfaces.CardsRepository
-	notes    interfaces.NotesRepository
-	users    interfaces.UsersRepository
-	db       interfaces.DB
+	binaries  interfaces.BinariesRepository
+	passwords interfaces.PasswordsRepository
+	cards     interfaces.CardsRepository
+	users     interfaces.UsersRepository
+	db        interfaces.DB
 }
 
 func NewRepositories(c *config.Config, l *zap.SugaredLogger) (*Repositories, error) {
@@ -81,10 +81,10 @@ func postgresRepositories(c *config.Config, l *zap.SugaredLogger) (*Repositories
 	}
 
 	return &Repositories{
-		binaries: psql.NewBinariesRepository(db),
-		cards:    psql.NewCardsRepository(db),
-		notes:    psql.NewNotesRepository(db),
-		users:    psql.NewUsersRepository(db),
-		db:       db,
+		binaries:  psql.NewBinariesRepository(db),
+		passwords: psql.NewPasswordsRepository(db),
+		cards:     psql.NewCardsRepository(db),
+		users:     psql.NewUsersRepository(db),
+		db:        db,
 	}, nil
 }
