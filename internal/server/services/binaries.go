@@ -16,8 +16,8 @@ func NewBinariesService(repo interfaces.BinariesRepository) *BinariesService {
 	}
 }
 
-func (s *BinariesService) Get(ctx context.Context, title string, owner int64) (*models.BinaryData, error) {
-	result, err := s.repo.Get(ctx, title, owner)
+func (s *BinariesService) Get(ctx context.Context, title string, UserID int64) (*models.BinaryData, error) {
+	result, err := s.repo.Get(ctx, title, UserID)
 	if err != nil {
 		return nil, err
 	}

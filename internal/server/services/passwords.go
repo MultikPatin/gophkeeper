@@ -16,8 +16,8 @@ func NewPasswordsService(repo interfaces.PasswordsRepository) *PasswordsService 
 	}
 }
 
-func (s *PasswordsService) Get(ctx context.Context, title string, owner int64) (*models.Password, error) {
-	result, err := s.repo.Get(ctx, title, owner)
+func (s *PasswordsService) Get(ctx context.Context, title string, UserID int64) (*models.Password, error) {
+	result, err := s.repo.Get(ctx, title, UserID)
 	if err != nil {
 		return nil, err
 	}

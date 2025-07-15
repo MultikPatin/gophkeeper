@@ -1,14 +1,12 @@
 package psql
 
 import (
+	"context"
 	"database/sql"
-	"errors"
 	"fmt"
-	"github.com/golang-migrate/migrate/v4"
-	pm "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"net/url"
-	"path/filepath"
+	"time"
 )
 
 // DB encapsulates a SQL database connection for interacting with a PostgresSQL backend.
@@ -53,32 +51,13 @@ func (p *DB) Ping() error {
 }
 
 // Migrate applies database schema migrations using the provided context and connection.
-func (p *DB) Migrate(migrationsPath string) error {
-	databaseName := "postgres"
-	sourceURL := "file://"
+func (p *DB) Migrate() error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
 
-	if migrationsPath == "" {
-		sourceURL += "conn/migrations"
-	} else {
-		path, err := filepath.Abs(migrationsPath)
-		if err != nil {
-			return err
-		}
-		sourceURL += path
-	}
-
-	driver, err := pm.WithInstance(p.conn, &pm.Config{})
+	_, err := p.conn.ExecContext(ctx, createTables)
 	if err != nil {
 		return err
 	}
-
-	m, err := migrate.NewWithDatabaseInstance(sourceURL, databaseName, driver)
-	if err != nil {
-		return err
-	}
-	if err = m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
-		return err
-	}
-
 	return nil
 }

@@ -5,28 +5,27 @@ type User struct {
 	Login    string
 	Password string
 }
+type Password struct {
+	ID       int64
+	Title    string
+	UserID   int64
+	Login    []byte
+	Password []byte
+}
 
 type Card struct {
 	ID         int64
 	Title      string
-	Bank       string
-	Owner      int64
-	Number     string
-	DataEnd    string
-	SecretCode string
-}
-
-type Password struct {
-	ID       int64
-	Title    string
-	Owner    int64
-	Login    string
-	Password string
+	UserID     int64
+	Bank       []byte
+	Number     []byte
+	DataEnd    []byte
+	SecretCode []byte
 }
 
 type BinaryData struct {
-	ID    int64
-	Title string
-	Owner int64
-	Data  []byte
+	ID     int64
+	Title  string
+	UserID int64
+	Data   []byte
 }

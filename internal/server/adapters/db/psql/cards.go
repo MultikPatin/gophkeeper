@@ -16,10 +16,10 @@ func NewCardsRepository(db *DB) *CardsRepository {
 	}
 }
 
-func (r *CardsRepository) Get(ctx context.Context, title string, owner int64) (*models.Card, error) {
+func (r *CardsRepository) Get(ctx context.Context, title string, UserID int64) (*models.Card, error) {
 	var result models.Card
 
-	err := r.db.conn.QueryRowContext(ctx, stmt.card.get, title, owner).Scan(&result.ID, &result.Title, &result.Bank, &result.Number, &result.DataEnd, &result.SecretCode)
+	err := r.db.conn.QueryRowContext(ctx, stmt.card.get, title, UserID).Scan(&result.ID, &result.Title, &result.Bank, &result.Number, &result.DataEnd, &result.SecretCode)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func (r *CardsRepository) Get(ctx context.Context, title string, owner int64) (*
 func (r *CardsRepository) Add(ctx context.Context, cond models.Card) (int64, error) {
 	var ID int64
 
-	err := r.db.conn.QueryRowContext(ctx, stmt.card.add, cond.Title, cond.Owner, cond.Bank, cond.Number, cond.DataEnd, cond.SecretCode).Scan(&ID)
+	err := r.db.conn.QueryRowContext(ctx, stmt.card.add, cond.Title, cond.UserID, cond.Bank, cond.Number, cond.DataEnd, cond.SecretCode).Scan(&ID)
 	if err != nil {
 		return -1, err
 	}

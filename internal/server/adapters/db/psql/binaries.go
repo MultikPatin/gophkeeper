@@ -16,10 +16,10 @@ func NewBinariesRepository(db *DB) *BinariesRepository {
 	}
 }
 
-func (r *BinariesRepository) Get(ctx context.Context, title string, owner int64) (*models.BinaryData, error) {
+func (r *BinariesRepository) Get(ctx context.Context, title string, UserID int64) (*models.BinaryData, error) {
 	var result models.BinaryData
 
-	err := r.db.conn.QueryRowContext(ctx, stmt.binary.get, title, owner).Scan(&result.ID, &result.Title, &result.Data)
+	err := r.db.conn.QueryRowContext(ctx, stmt.binary.get, title, UserID).Scan(&result.ID, &result.Title, &result.Data)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func (r *BinariesRepository) Get(ctx context.Context, title string, owner int64)
 func (r *BinariesRepository) Add(ctx context.Context, cond models.BinaryData) (int64, error) {
 	var ID int64
 
-	err := r.db.conn.QueryRowContext(ctx, stmt.binary.add, cond.Title, cond.Owner, cond.Data).Scan(&ID)
+	err := r.db.conn.QueryRowContext(ctx, stmt.binary.add, cond.Title, cond.UserID, cond.Data).Scan(&ID)
 	if err != nil {
 		return -1, err
 	}

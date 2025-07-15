@@ -14,13 +14,7 @@ import (
 type Config struct {
 	DatabaseDSN  *url.URL // Database connection details (Data Source Name).
 	DatabaseType string   // Database type (e.g. "postgres", "mysql", etc.).
-	MigrationDir string   // Directory where migration files are located.
-	Addr         string   // Server listening address.
-	JWTSecret    string   // Secret key for JWT authentication.
-	//GRPCAddr         string   // gRPC server address.
-	//ShortLinkPrefix  string   // Base URL for short links.
-	//StorageFilePaths string   // Path where storage files are located.
-	//ExecutableDir    string   // Project directory
-	//HTTPSEnable      bool     // Indicates whether HTTPS is enabled for the server.
-	//TrustedSubnet    string   // Trusted subnet for the server.
+	//Addr         string   // Server listening address.
+	JWTSecret string // Secret key for JWT authentication.
+	GRPCAddr  string // gRPC server address.
 }

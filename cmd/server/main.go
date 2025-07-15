@@ -3,7 +3,7 @@ package server
 import (
 	"fmt"
 	l "main/internal/logger"
-	"main/internal/server/app"
+	"main/internal/server"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -22,7 +22,7 @@ func main() {
 
 	c := config.Parse(filepath.Dir(exPath), logger)
 
-	a, err := app.NewApp(c, logger)
+	a, err := server.NewApp(c, logger)
 	if err != nil {
 		logger.Fatalw(err.Error(), "event", "initialize application")
 		return

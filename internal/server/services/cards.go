@@ -16,8 +16,8 @@ func NewCardsService(repo interfaces.CardsRepository) *CardsService {
 	}
 }
 
-func (s *CardsService) Get(ctx context.Context, title string, owner int64) (*models.Card, error) {
-	result, err := s.repo.Get(ctx, title, owner)
+func (s *CardsService) Get(ctx context.Context, title string, UserID int64) (*models.Card, error) {
+	result, err := s.repo.Get(ctx, title, UserID)
 	if err != nil {
 		return nil, err
 	}
