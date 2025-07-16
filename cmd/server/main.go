@@ -3,10 +3,10 @@ package server
 import (
 	"fmt"
 	l "main/internal/logger"
-	"main/internal/server"
+	"main/internal/server/app/grps"
+	"main/internal/server/config"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"syscall"
 )
 
@@ -20,9 +20,9 @@ func main() {
 
 	logger.Info("Initializing server...")
 
-	c := config.Parse(filepath.Dir(exPath), logger)
+	c := config.Parse(logger)
 
-	a, err := server.NewApp(c, logger)
+	a, err := grps.NewApp(c, logger)
 	if err != nil {
 		logger.Fatalw(err.Error(), "event", "initialize application")
 		return
