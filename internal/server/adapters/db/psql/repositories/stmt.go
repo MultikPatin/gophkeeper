@@ -1,4 +1,4 @@
-package psql
+package repositories
 
 var stmt = statements{
 	user: user{

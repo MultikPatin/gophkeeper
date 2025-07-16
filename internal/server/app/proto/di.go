@@ -9,6 +9,7 @@ import (
 	"log"
 	"main/internal/server"
 	"main/internal/server/adapters/db/psql"
+	"main/internal/server/adapters/db/psql/repositories"
 	"main/internal/server/config"
 	"main/internal/server/interfaces"
 	"main/internal/server/services"
@@ -169,10 +170,10 @@ func postgresRepositories(c *config.Config, l *zap.SugaredLogger) (*Repositories
 	}
 
 	return &Repositories{
-		binaries:  psql.NewBinariesRepository(db),
-		passwords: psql.NewPasswordsRepository(db),
-		cards:     psql.NewCardsRepository(db),
-		users:     psql.NewUsersRepository(db),
+		binaries:  repositories.NewBinariesRepository(db),
+		passwords: repositories.NewPasswordsRepository(db),
+		cards:     repositories.NewCardsRepository(db),
+		users:     repositories.NewUsersRepository(db),
 		db:        db,
 	}, nil
 }

@@ -10,7 +10,7 @@ import (
 
 // DB encapsulates a SQL database connection for interacting with a PostgresSQL backend.
 type DB struct {
-	conn *sql.DB // The active database connection.
+	Conn *sql.DB // The active database connection.
 }
 
 // NewDB establishes a new PostgresSQL database connection using provided credentials.
@@ -30,13 +30,13 @@ func NewDB(dsn *url.URL) (*DB, error) {
 	}
 
 	return &DB{
-		conn: db,
+		Conn: db,
 	}, nil
 }
 
 // Close terminates the database connection cleanly.
 func (p *DB) Close() error {
-	err := p.conn.Close()
+	err := p.Conn.Close()
 	if err != nil {
 		return err
 	}
@@ -45,7 +45,7 @@ func (p *DB) Close() error {
 
 // Ping verifies connectivity to the database by issuing a ping request.
 func (p *DB) Ping() error {
-	err := p.conn.Ping()
+	err := p.Conn.Ping()
 	return err
 }
 
@@ -54,7 +54,7 @@ func (p *DB) Migrate() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	_, err := p.conn.ExecContext(ctx, createTables)
+	_, err := p.Conn.ExecContext(ctx, createTables)
 	if err != nil {
 		return err
 	}
