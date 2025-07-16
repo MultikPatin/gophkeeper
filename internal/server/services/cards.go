@@ -7,12 +7,14 @@ import (
 )
 
 type CardsService struct {
-	repo interfaces.CardsRepository
+	repo   interfaces.CardsRepository
+	crypto interfaces.CryptoService
 }
 
-func NewCardsService(repo interfaces.CardsRepository) *CardsService {
+func NewCardsService(repo interfaces.CardsRepository, crypto interfaces.CryptoService) *CardsService {
 	return &CardsService{
-		repo: repo,
+		repo:   repo,
+		crypto: crypto,
 	}
 }
 

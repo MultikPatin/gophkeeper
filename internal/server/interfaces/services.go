@@ -28,5 +28,5 @@ type CardsService interface {
 
 type UsersService interface {
 	Register(ctx context.Context, cond models.User) error
-	Login(ctx context.Context, Login string) (*models.User, error)
+	Login(ctx context.Context, cond models.User) error
 }

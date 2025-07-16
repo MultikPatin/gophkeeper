@@ -28,7 +28,7 @@ func (r *UsersRepository) Register(ctx context.Context, cond models.User) error 
 
 	var pgErr *pgconn.PgError
 	if errors.As(err, &pgErr) && pgerrcode.IsIntegrityConstraintViolation(pgErr.Code) {
-		return services.ErrUserAlreadyExists
+		return services.ErrLoginAlreadyExists
 	}
 
 	if err != nil {

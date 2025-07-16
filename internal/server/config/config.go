@@ -23,6 +23,7 @@ type Config struct {
 	DatabaseDSN  *url.URL // Database connection details (Data Source Name).
 	DatabaseType string   // Database type (e.g. "postgres", "mysql", etc.).
 	JWTSecret    string   // Secret key for JWT authentication.
+	CryptoSecret string   // Secret key for cryptographic operations.
 	GRPCPort     string   // gRPC server port.
 }
 
@@ -31,6 +32,7 @@ type envConfig struct {
 	DatabaseDSN  string `env:"DATABASE_DSN"`  // PostgresSQL Data Source Name received from an environment variable.
 	DatabaseType string `env:"DATABASE_TYPE"` // Database type (e.g. "postgres", "mysql", etc.).
 	JWTSecret    string `env:"JWT_SECRET"`    // Secret key for JWT authentication.
+	CryptoSecret string `env:"CRYPTO_SECRET"` // Secret key for cryptographic operations.
 	GRPCPort     string `env:"GRPC_PORT"`     // gRPC server port.
 }
 
@@ -62,7 +64,6 @@ func Parse(logger *zap.SugaredLogger) *Config {
 		default:
 			cfg.DatabaseDSN, _ = parseDSN(DefaultPostgresDNS)
 		}
-
 	}
 
 	if err := ValidatePort(envCfg.GRPCPort); err != nil {
@@ -71,6 +72,14 @@ func Parse(logger *zap.SugaredLogger) *Config {
 		cfg.GRPCPort = DefaultGRPCPort
 	} else {
 		cfg.GRPCPort = envCfg.GRPCPort
+	}
+
+	if envCfg.CryptoSecret == "" {
+		logger.Infow("Crypto secret is empty")
+		logger.Infow("Using default crypto secret:", "secret", "secret")
+		cfg.CryptoSecret = "secret"
+	} else {
+		cfg.CryptoSecret = envCfg.CryptoSecret
 	}
 
 	return cfg

@@ -7,12 +7,14 @@ import (
 )
 
 type BinariesService struct {
-	repo interfaces.BinariesRepository
+	repo   interfaces.BinariesRepository
+	crypto interfaces.CryptoService
 }
 
-func NewBinariesService(repo interfaces.BinariesRepository) *BinariesService {
+func NewBinariesService(repo interfaces.BinariesRepository, crypto interfaces.CryptoService) *BinariesService {
 	return &BinariesService{
-		repo: repo,
+		repo:   repo,
+		crypto: crypto,
 	}
 }
 

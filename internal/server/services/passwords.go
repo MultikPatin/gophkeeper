@@ -7,12 +7,14 @@ import (
 )
 
 type PasswordsService struct {
-	repo interfaces.PasswordsRepository
+	repo   interfaces.PasswordsRepository
+	crypto interfaces.CryptoService
 }
 
-func NewPasswordsService(repo interfaces.PasswordsRepository) *PasswordsService {
+func NewPasswordsService(repo interfaces.PasswordsRepository, crypto interfaces.CryptoService) *PasswordsService {
 	return &PasswordsService{
-		repo: repo,
+		repo:   repo,
+		crypto: crypto,
 	}
 }
 

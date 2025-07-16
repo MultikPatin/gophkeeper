@@ -11,6 +11,7 @@ import (
 	"main/internal/server/adapters/db/psql"
 	"main/internal/server/adapters/db/psql/repositories"
 	"main/internal/server/config"
+	"main/internal/server/crypto/aes"
 	"main/internal/server/interfaces"
 	"main/internal/server/services"
 	"net"
@@ -111,11 +112,15 @@ func NewServices(c *config.Config, l *zap.SugaredLogger) (*Services, error) {
 	if err != nil {
 		return nil, err
 	}
+	crypto, err := aes.NewCryptoAes([]byte(c.CryptoSecret))
+	if err != nil {
+		return nil, err
+	}
 
 	return &Services{
-		binaries:  services.NewBinariesService(r.binaries),
-		passwords: services.NewPasswordsService(r.passwords),
-		cards:     services.NewCardsService(r.cards),
+		binaries:  services.NewBinariesService(r.binaries, crypto),
+		passwords: services.NewPasswordsService(r.passwords, crypto),
+		cards:     services.NewCardsService(r.cards, crypto),
 		users:     services.NewUsersService(r.users),
 		r:         r,
 	}, nil
