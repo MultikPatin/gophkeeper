@@ -1,11 +1,11 @@
-package server
+package grps
 
 import (
 	"errors"
 	"go.uber.org/zap"
 	"main/internal/server/adapters/db/psql"
+	"main/internal/server/app/grps/handlers"
 	"main/internal/server/config"
-	"main/internal/server/handlers"
 	"main/internal/server/interfaces"
 	"main/internal/server/services"
 )

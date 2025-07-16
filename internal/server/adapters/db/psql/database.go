@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"net/url"
 	"time"
 )

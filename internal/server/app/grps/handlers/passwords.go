@@ -5,10 +5,10 @@ import (
 )
 
 type PasswordsHandler struct {
-	s interfaces.BinariesService
+	s interfaces.PasswordsService
 }
 
-func NewPasswordsHandler(s interfaces.BinariesService) *PasswordsHandler {
+func NewPasswordsHandler(s interfaces.PasswordsService) *PasswordsHandler {
 	return &PasswordsHandler{
 		s: s,
 	}

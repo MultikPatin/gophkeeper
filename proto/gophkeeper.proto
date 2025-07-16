@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package gophkeeper;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/MultikPatin/gophkeeper/proto";
+
+// User
+
+message RegisterRequest {
+  string login = 1;
+  string password = 2;
+}
+
+message RegisterResponse {
+  string token = 1;
+}
+
+message LoginRequest {
+  string login = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+}
+
+// Password
+
+message PasswordRequest {
+  string title = 1;
+}
+
+
+message PasswordResponse {
+  int64  id = 1;
+  string title = 2;
+  string login = 3;
+  string password = 4;
+}
+
+message PasswordCreateRequest {
+  string title = 1;
+  string login = 2;
+  string password = 3;
+}
+
+message PasswordUpdateRequest {
+  int64  id = 1;
+  string login = 2;
+  string password = 3;
+}
+
+// Card
+
+message CardRequest {
+  string title = 1;
+}
+
+message CardResponse {
+  int64  id = 1;
+  string title = 2;
+  string bank = 3;
+  string number = 4;
+  string dataEnd = 5;
+  string secretCode = 6;
+}
+
+message CardCreateRequest {
+  string title = 1;
+  string bank = 3;
+  string number = 4;
+  string dataEnd = 5;
+  string secretCode = 6;
+}
+
+message CardUpdateRequest {
+  int64  id = 1;
+  string bank = 3;
+  string number = 4;
+  string dataEnd = 5;
+  string secretCode = 6;
+}
+
+// Binaries
+
+message BinariesRequest {
+  string title = 1;
+}
+
+message BinariesResponse {
+  int64  id = 1;
+  string title = 2;
+  string data = 3;
+}
+
+message BinariesCreateRequest {
+  string title = 1;
+  string data = 2;
+}
+
+message BinariesUpdateRequest {
+  int64  id = 1;
+  bytes data = 2;
+}
+
+// Services
+
+service Users {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+}
+
+service Passwords {
+  rpc Get(PasswordRequest) returns (PasswordResponse);
+  rpc Add(PasswordCreateRequest) returns (PasswordResponse);
+  rpc Update(PasswordUpdateRequest) returns (PasswordResponse);
+  rpc Delete(PasswordRequest) returns (google.protobuf.Empty);
+}
+
+service Cards {
+  rpc Get(CardRequest) returns (CardResponse);
+  rpc Add(CardCreateRequest) returns (CardResponse);
+  rpc Update(CardUpdateRequest) returns (CardResponse);
+  rpc Delete(CardRequest) returns (google.protobuf.Empty);
+}
+
+service Binaries {
+  rpc Get(BinariesRequest) returns (BinariesResponse);
+  rpc Add(BinariesCreateRequest) returns (BinariesResponse);
+  rpc Update(BinariesUpdateRequest) returns (BinariesResponse);
+  rpc Delete(BinariesRequest) returns (google.protobuf.Empty);
+}

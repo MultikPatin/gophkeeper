@@ -5,10 +5,10 @@ import (
 )
 
 type UsersHandler struct {
-	s interfaces.BinariesService
+	s interfaces.UsersService
 }
 
-func NewUsersHandler(s interfaces.BinariesService) *UsersHandler {
+func NewUsersHandler(s interfaces.UsersService) *UsersHandler {
 	return &UsersHandler{
 		s: s,
 	}

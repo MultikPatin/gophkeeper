@@ -5,10 +5,10 @@ import (
 )
 
 type CardsHandler struct {
-	s interfaces.BinariesService
+	s interfaces.CardsService
 }
 
-func NewCardsHandler(s interfaces.BinariesService) *CardsHandler {
+func NewCardsHandler(s interfaces.CardsService) *CardsHandler {
 	return &CardsHandler{
 		s: s,
 	}
