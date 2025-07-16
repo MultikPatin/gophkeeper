@@ -5,6 +5,17 @@ import (
 	"github.com/caarlos0/env/v6"
 	"go.uber.org/zap"
 	"net/url"
+	"strconv"
+)
+
+type DatabaseType string
+
+const (
+	DefaultDatabaseType = "postgres"
+	DefaultPostgresDNS  = "postgres://postgres:postgres@localhost:5432/gophkeeper"
+	DefaultGRPCPort     = "5050"
+
+	PostgresSQL DatabaseType = "postgres"
 )
 
 // Config stores all the necessary configurations from both environment variables and command line inputs.
@@ -33,6 +44,35 @@ func Parse(logger *zap.SugaredLogger) *Config {
 	}
 	fmt.Printf("envCfg: %+v\n", envCfg)
 
+	dbType, err := parseDatabaseType(envCfg.DatabaseType)
+	if err != nil {
+		logger.Infow("Invalid database type", "error", err.Error())
+		logger.Infow("Using default database:", "type", DefaultDatabaseType)
+		cfg.DatabaseType = string(PostgresSQL)
+	}
+	cfg.DatabaseType = string(dbType)
+
+	cfg.DatabaseDSN, err = parseDSN(envCfg.DatabaseDSN)
+	if err != nil {
+		logger.Infow("Error while parsing database DSN", "error", err.Error())
+		logger.Infow("Using default database:", "DSN", DefaultPostgresDNS)
+		switch cfg.DatabaseType {
+		case string(PostgresSQL):
+			cfg.DatabaseDSN, _ = parseDSN(DefaultPostgresDNS)
+		default:
+			cfg.DatabaseDSN, _ = parseDSN(DefaultPostgresDNS)
+		}
+
+	}
+
+	if err := ValidatePort(envCfg.GRPCPort); err != nil {
+		logger.Infow("Invalid GRPC port", "error", err.Error())
+		logger.Infow("Using default GRPC:", "port", DefaultGRPCPort)
+		cfg.GRPCPort = DefaultGRPCPort
+	} else {
+		cfg.GRPCPort = envCfg.GRPCPort
+	}
+
 	return cfg
 }
 
@@ -43,7 +83,6 @@ func parseEnv() (*envConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return cfg, nil
 }
 
@@ -54,4 +93,37 @@ func parseDSN(dsn string) (*url.URL, error) {
 		return nil, fmt.Errorf("failed to parse DSN: %w", err)
 	}
 	return u, nil
+}
+
+func parseDatabaseType(s string) (DatabaseType, error) {
+	switch s {
+	case string(PostgresSQL):
+		return PostgresSQL, nil
+	default:
+		return "", fmt.Errorf("unsupported database type: %s", s)
+	}
+}
+
+func ValidatePort(port string) error {
+	if port == "" {
+		return fmt.Errorf("GRPC port is empty")
+	}
+	if port[0] == ':' {
+		port = port[1:]
+	}
+	if port == "0" {
+		return fmt.Errorf("GRPC port cannot be 0")
+	}
+	if len(port) > 5 {
+		return fmt.Errorf("GRPC port is too long")
+	}
+	for _, r := range port {
+		if r < '0' || r > '9' {
+			return fmt.Errorf("GRPC port contains non-digit characters")
+		}
+	}
+	if p, _ := strconv.Atoi(port); p < 1 || p > 65535 {
+		return fmt.Errorf("GRPC port is out of valid range (1-65535)")
+	}
+	return nil
 }

@@ -5,8 +5,6 @@ import "time"
 // Type for storing the key of a user's ID in request contexts
 type userIDKey string
 
-var IgnoreURLs = []string{"/register", "/login"}
-
 // Content types and other common constants.
 const (
 	// ServerShutdownTime specifies the grace period for shutting down the server.
