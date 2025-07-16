@@ -40,8 +40,8 @@ func (s *CardsService) Update(ctx context.Context, cond models.Card) (int64, err
 	return result, nil
 }
 
-func (s *CardsService) Delete(ctx context.Context, ID int64) error {
-	err := s.repo.Delete(ctx, ID)
+func (s *CardsService) Delete(ctx context.Context, title string, UserID int64) error {
+	err := s.repo.Delete(ctx, title, UserID)
 	if err != nil {
 		return err
 	}

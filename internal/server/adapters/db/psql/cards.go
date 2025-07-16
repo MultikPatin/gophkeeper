@@ -39,15 +39,15 @@ func (r *CardsRepository) Add(ctx context.Context, cond models.Card) (int64, err
 func (r *CardsRepository) Update(ctx context.Context, cond models.Card) (int64, error) {
 	var ID int64
 
-	err := r.db.conn.QueryRowContext(ctx, stmt.card.update, cond.Bank, cond.Number, cond.DataEnd, cond.SecretCode).Scan(&ID)
+	err := r.db.conn.QueryRowContext(ctx, stmt.card.update, cond.Bank, cond.Number, cond.DataEnd, cond.SecretCode, cond.Title, cond.UserID).Scan(&ID)
 	if err != nil {
 		return -1, err
 	}
 	return ID, nil
 }
 
-func (r *CardsRepository) Delete(ctx context.Context, ID int64) error {
-	_, err := r.db.conn.ExecContext(ctx, stmt.card.delete, ID)
+func (r *CardsRepository) Delete(ctx context.Context, title string, UserID int64) error {
+	_, err := r.db.conn.ExecContext(ctx, stmt.card.delete, title, UserID)
 	if err != nil {
 		return err
 	}

@@ -39,15 +39,15 @@ func (r *PasswordsRepository) Add(ctx context.Context, cond models.Password) (in
 func (r *PasswordsRepository) Update(ctx context.Context, cond models.Password) (int64, error) {
 	var ID int64
 
-	err := r.db.conn.QueryRowContext(ctx, stmt.password.update, cond.Login, cond.Password).Scan(&ID)
+	err := r.db.conn.QueryRowContext(ctx, stmt.password.update, cond.Login, cond.Password, cond.Title, cond.UserID).Scan(&ID)
 	if err != nil {
 		return -1, err
 	}
 	return ID, nil
 }
 
-func (r *PasswordsRepository) Delete(ctx context.Context, ID int64) error {
-	_, err := r.db.conn.ExecContext(ctx, stmt.password.delete, ID)
+func (r *PasswordsRepository) Delete(ctx context.Context, title string, UserID int64) error {
+	_, err := r.db.conn.ExecContext(ctx, stmt.password.delete, title, UserID)
 	if err != nil {
 		return err
 	}

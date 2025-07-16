@@ -39,15 +39,15 @@ func (r *BinariesRepository) Add(ctx context.Context, cond models.BinaryData) (i
 func (r *BinariesRepository) Update(ctx context.Context, cond models.BinaryData) (int64, error) {
 	var ID int64
 
-	err := r.db.conn.QueryRowContext(ctx, stmt.binary.update, cond.Data).Scan(&ID)
+	err := r.db.conn.QueryRowContext(ctx, stmt.binary.update, cond.Data, cond.Title, cond.UserID).Scan(&ID)
 	if err != nil {
 		return -1, err
 	}
 	return ID, nil
 }
 
-func (r *BinariesRepository) Delete(ctx context.Context, ID int64) error {
-	_, err := r.db.conn.ExecContext(ctx, stmt.binary.delete, ID)
+func (r *BinariesRepository) Delete(ctx context.Context, title string, UserID int64) error {
+	_, err := r.db.conn.ExecContext(ctx, stmt.binary.delete, title, UserID)
 	if err != nil {
 		return err
 	}

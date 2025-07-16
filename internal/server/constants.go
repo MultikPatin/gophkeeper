@@ -7,14 +7,8 @@ type userIDKey string
 
 // Content types and other common constants.
 const (
-	// ServerShutdownTime specifies the grace period for shutting down the server.
-	ServerShutdownTime = 5 * time.Second
-
-	// CertFile is the name of the certificate file used for TLS/SSL.
-	CertFile = "cert.pem"
-
-	// KeyFile is the name of the private key file used for TLS/SSL.
-	KeyFile = "key.pem"
+	// ShutdownTime specifies the grace period for shutting down the server.
+	ShutdownTime = 5 * time.Second
 
 	// TokenExp defines the expiration duration of a JWT token (3 hours).
 	// Used to set the expiration period for authentication tokens.

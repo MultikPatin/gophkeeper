@@ -75,7 +75,7 @@ func (a *App) StartServer() error {
 	case err := <-errCh:
 		log.Println("Error in gRPC server:", err)
 	case <-a.ctx.Done():
-		_, cancelShutdown := context.WithTimeout(context.Background(), server.ServerShutdownTime)
+		_, cancelShutdown := context.WithTimeout(context.Background(), server.ShutdownTime)
 		defer cancelShutdown()
 		a.srv.GracefulStop()
 		if err := listen.Close(); err != nil {
