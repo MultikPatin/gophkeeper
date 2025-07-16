@@ -1,4 +1,4 @@
-package grps
+package proto
 
 import (
 	"context"
@@ -34,7 +34,7 @@ func NewApp(c *config.Config, l *zap.SugaredLogger) (*App, error) {
 		return nil, err
 	}
 
-	srv, err := NewServer(s)
+	srv, err := NewServer(s, l)
 	if err != nil {
 		return nil, err
 	}

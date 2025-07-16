@@ -3,7 +3,7 @@ package server
 import (
 	"fmt"
 	l "main/internal/logger"
-	"main/internal/server/app/grps"
+	"main/internal/server/app/proto"
 	"main/internal/server/config"
 	"os"
 	"os/signal"
@@ -22,7 +22,7 @@ func main() {
 
 	c := config.Parse(logger)
 
-	a, err := grps.NewApp(c, logger)
+	a, err := proto.NewApp(c, logger)
 	if err != nil {
 		logger.Fatalw(err.Error(), "event", "initialize application")
 		return
