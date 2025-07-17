@@ -6,34 +6,38 @@ import (
 	"go.uber.org/zap"
 	"net/url"
 	"strconv"
+	"time"
 )
 
 type DatabaseType string
 
 const (
-	DefaultDatabaseType = "postgres"
-	DefaultPostgresDNS  = "postgres://postgres:postgres@localhost:5432/gophkeeper"
-	DefaultGRPCPort     = "5050"
+	DefaultJWTExpiration = time.Hour * 3
+	DefaultDatabaseType  = "postgres"
+	DefaultPostgresDNS   = "postgres://postgres:postgres@localhost:5432/gophkeeper"
+	DefaultGRPCPort      = "5050"
 
 	PostgresSQL DatabaseType = "postgres"
 )
 
 // Config stores all the necessary configurations from both environment variables and command line inputs.
 type Config struct {
-	DatabaseDSN  *url.URL // Database connection details (Data Source Name).
-	DatabaseType string   // Database type (e.g. "postgres", "mysql", etc.).
-	JWTSecret    string   // Secret key for JWT authentication.
-	CryptoSecret string   // Secret key for cryptographic operations.
-	GRPCPort     string   // gRPC server port.
+	DatabaseDSN   *url.URL      // Database connection details (Data Source Name).
+	DatabaseType  string        // Database type (e.g. "postgres", "mysql", etc.).
+	JWTSecret     string        // Secret key for JWT authentication.
+	JWTExpiration time.Duration // JWT expiration time.
+	CryptoSecret  string        // Secret key for cryptographic operations.
+	GRPCPort      string        // gRPC server port.
 }
 
 // envConfig holds configuration settings retrieved from environment variables.
 type envConfig struct {
-	DatabaseDSN  string `env:"DATABASE_DSN"`  // PostgresSQL Data Source Name received from an environment variable.
-	DatabaseType string `env:"DATABASE_TYPE"` // Database type (e.g. "postgres", "mysql", etc.).
-	JWTSecret    string `env:"JWT_SECRET"`    // Secret key for JWT authentication.
-	CryptoSecret string `env:"CRYPTO_SECRET"` // Secret key for cryptographic operations.
-	GRPCPort     string `env:"GRPC_PORT"`     // gRPC server port.
+	DatabaseDSN   string `env:"DATABASE_DSN"`   // PostgresSQL Data Source Name received from an environment variable.
+	DatabaseType  string `env:"DATABASE_TYPE"`  // Database type (e.g. "postgres", "mysql", etc.).
+	JWTSecret     string `env:"JWT_SECRET"`     // Secret key for JWT authentication.
+	JWTExpiration string `env:"JWT_EXPIRATION"` // JWT expiration time in hours (1..24).
+	CryptoSecret  string `env:"CRYPTO_SECRET"`  // Secret key for cryptographic operations.
+	GRPCPort      string `env:"GRPC_PORT"`      // gRPC server port.
 }
 
 // Parse merges environment variables and command-line options into a single configuration object.
@@ -80,6 +84,15 @@ func Parse(logger *zap.SugaredLogger) *Config {
 		cfg.CryptoSecret = "secret"
 	} else {
 		cfg.CryptoSecret = envCfg.CryptoSecret
+	}
+
+	num, err := IsNumberInRange(envCfg.JWTExpiration, 1, 99)
+	if err != nil {
+		logger.Infow("Invalid JWT expiration", "error", err.Error())
+		logger.Infow("Using default JWTExpiration:", "expiration", DefaultJWTExpiration)
+		cfg.JWTExpiration = DefaultJWTExpiration
+	} else {
+		cfg.JWTExpiration = time.Hour * time.Duration(num)
 	}
 
 	return cfg
@@ -135,4 +148,12 @@ func ValidatePort(port string) error {
 		return fmt.Errorf("GRPC port is out of valid range (1-65535)")
 	}
 	return nil
+}
+
+func IsNumberInRange(s string, min int, max int) (int, error) {
+	num, err := strconv.Atoi(s)
+	if err != nil || num < min || num > max {
+		return -1, fmt.Errorf("invalid number: %s", s)
+	}
+	return num, nil
 }

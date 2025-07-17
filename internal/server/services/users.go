@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"errors"
-	"golang.org/x/crypto/bcrypt"
 	"main/internal/server/interfaces"
 	"main/internal/server/models"
 	"time"
@@ -15,12 +14,14 @@ var (
 )
 
 type UsersService struct {
-	repo interfaces.UsersRepository
+	r interfaces.UsersRepository
+	c interfaces.PassCryptoService
 }
 
-func NewUsersService(repo interfaces.UsersRepository) *UsersService {
+func NewUsersService(r interfaces.UsersRepository, c interfaces.PassCryptoService) *UsersService {
 	return &UsersService{
-		repo: repo,
+		r: r,
+		c: c,
 	}
 }
 
@@ -28,13 +29,13 @@ func (s *UsersService) Register(ctx context.Context, cond models.User) error {
 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
 
-	hash, err := hashPassword(cond.Password)
+	hash, err := s.c.Hash(cond.Password)
 	if err != nil {
 		return err
 	}
 	cond.Password = hash
 
-	err = s.repo.Register(ctx, cond)
+	err = s.r.Register(ctx, cond)
 	if err != nil {
 		return err
 	}
@@ -45,27 +46,14 @@ func (s *UsersService) Login(ctx context.Context, cond models.User) error {
 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
 
-	result, err := s.repo.Login(ctx, cond.Login)
+	result, err := s.r.Login(ctx, cond.Login)
 	if err != nil {
 		return err
 	}
 
-	if !isEqualPasswords(cond.Password, result.Password) {
+	if !s.c.IsEqual(cond.Password, result.Password) {
 		return ErrAuthCredentialsIsNotValid
 	}
 
 	return nil
-}
-
-func isEqualPasswords(password string, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
-}
-
-func hashPassword(password string) (string, error) {
-	hashedBytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return "", err
-	}
-	return string(hashedBytes), nil
 }

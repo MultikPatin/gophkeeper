@@ -9,11 +9,13 @@ import (
 type UsersHandler struct {
 	pb.UnimplementedUsersServer
 	s interfaces.UsersService
+	j interfaces.JWTService
 }
 
-func NewUsersHandler(s interfaces.UsersService) *UsersHandler {
+func NewUsersHandler(s interfaces.UsersService, j interfaces.JWTService) *UsersHandler {
 	return &UsersHandler{
 		s: s,
+		j: j,
 	}
 }
 

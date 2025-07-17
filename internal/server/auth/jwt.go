@@ -7,27 +7,42 @@ import (
 	"time"
 )
 
-// VerifyJWT validates a JWT token and extracts the user ID claim.
-func VerifyJWT(tokenStr string, secret string) (*Claims, error) {
+var (
+	ErrUnexpectedMethod = errors.New("unexpected signing method")
+	ErrInvalidToken     = errors.New("invalid token")
+)
+
+type JWTService struct {
+	secret   string
+	tokenExp time.Duration
+}
+
+func NewJWTService(secret string, tokenExp time.Duration) (*JWTService, error) {
+	return &JWTService{
+		secret:   secret,
+		tokenExp: tokenExp,
+	}, nil
+}
+
+func (s *JWTService) Verify(tokenStr string) (int64, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			return nil, ErrUnexpectedMethod
 		}
-		return []byte(secret), nil
+		return []byte(s.secret), nil
 	})
 	if err != nil {
-		return nil, err
+		return -1, err
 	}
 	claims, ok := token.Claims.(*Claims)
 	if !ok || !token.Valid {
-		return nil, errors.New("invalid token")
+		return -1, ErrInvalidToken
 	}
-	return claims, nil
+	return claims.UserID, nil
 }
 
-// GenerateJWT issues a signed JWT token with a specified user ID and expiry.
-func GenerateJWT(userID int64, secret string, tokenExp time.Duration) (string, error) {
-	expirationTime := time.Now().Add(tokenExp)
+func (s *JWTService) Generate(userID int64) (string, error) {
+	expirationTime := time.Now().Add(s.tokenExp)
 	claims := &Claims{
 		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -35,7 +50,7 @@ func GenerateJWT(userID int64, secret string, tokenExp time.Duration) (string, e
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString([]byte(secret))
+	tokenString, err := token.SignedString([]byte(s.secret))
 	if err != nil {
 		fmt.Println(err)
 		return "", err

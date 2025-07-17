@@ -1,4 +1,4 @@
-package aes
+package crypto
 
 import (
 	"crypto/aes"
@@ -7,11 +7,11 @@ import (
 	"io"
 )
 
-type CryptoAes struct {
+type Aes struct {
 	gcm cipher.AEAD
 }
 
-func NewCryptoAes(key []byte) (*CryptoAes, error) {
+func NewAes(key []byte) (*Aes, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -22,10 +22,10 @@ func NewCryptoAes(key []byte) (*CryptoAes, error) {
 		return nil, err
 	}
 
-	return &CryptoAes{aesGCM}, nil
+	return &Aes{aesGCM}, nil
 }
 
-func (a *CryptoAes) Encrypt(data []byte) ([]byte, error) {
+func (a *Aes) Encrypt(data []byte) ([]byte, error) {
 	nonce := make([]byte, a.gcm.NonceSize()) //12)
 	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func (a *CryptoAes) Encrypt(data []byte) ([]byte, error) {
 	return res, nil
 }
 
-func (a *CryptoAes) Decrypt(ciphertext []byte) ([]byte, error) {
+func (a *Aes) Decrypt(ciphertext []byte) ([]byte, error) {
 	nonceSize := a.gcm.NonceSize()
 	nonce, ciphertext := ciphertext[:nonceSize], ciphertext[nonceSize:]
 

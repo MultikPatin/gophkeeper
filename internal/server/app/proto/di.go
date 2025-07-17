@@ -11,7 +11,7 @@ import (
 	"main/internal/server/adapters/db/psql"
 	"main/internal/server/adapters/db/psql/repositories"
 	"main/internal/server/config"
-	"main/internal/server/crypto/aes"
+	"main/internal/server/crypto"
 	"main/internal/server/interfaces"
 	"main/internal/server/services"
 	"net"
@@ -36,7 +36,7 @@ func NewApp(c *config.Config, l *zap.SugaredLogger) (*App, error) {
 		return nil, err
 	}
 
-	srv, err := NewServer(s, l)
+	srv, err := NewServer(s, c, l)
 	if err != nil {
 		return nil, err
 	}
@@ -112,16 +112,21 @@ func NewServices(c *config.Config, l *zap.SugaredLogger) (*Services, error) {
 	if err != nil {
 		return nil, err
 	}
-	crypto, err := aes.NewCryptoAes([]byte(c.CryptoSecret))
+
+	aesCrypto, err := crypto.NewAes([]byte(c.CryptoSecret))
+	if err != nil {
+		return nil, err
+	}
+	passCrypto, err := crypto.NewPassCrypto()
 	if err != nil {
 		return nil, err
 	}
 
 	return &Services{
-		binaries:  services.NewBinariesService(r.binaries, crypto),
-		passwords: services.NewPasswordsService(r.passwords, crypto),
-		cards:     services.NewCardsService(r.cards, crypto),
-		users:     services.NewUsersService(r.users),
+		binaries:  services.NewBinariesService(r.binaries, aesCrypto),
+		passwords: services.NewPasswordsService(r.passwords, aesCrypto),
+		cards:     services.NewCardsService(r.cards, aesCrypto),
+		users:     services.NewUsersService(r.users, passCrypto),
 		r:         r,
 	}, nil
 }
@@ -145,11 +150,11 @@ type Repositories struct {
 func NewRepositories(c *config.Config, l *zap.SugaredLogger) (*Repositories, error) {
 	switch c.DatabaseType {
 	case "postgres":
-		repositories, err := postgresRepositories(c, l)
+		r, err := postgresRepositories(c, l)
 		if err != nil {
 			return nil, err
 		}
-		return repositories, nil
+		return r, nil
 	default:
 		return nil, errors.New("unsupported database type")
 	}

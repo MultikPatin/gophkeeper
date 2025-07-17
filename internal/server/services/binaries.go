@@ -7,19 +7,19 @@ import (
 )
 
 type BinariesService struct {
-	repo   interfaces.BinariesRepository
-	crypto interfaces.CryptoService
+	r interfaces.BinariesRepository
+	c interfaces.CryptoService
 }
 
-func NewBinariesService(repo interfaces.BinariesRepository, crypto interfaces.CryptoService) *BinariesService {
+func NewBinariesService(r interfaces.BinariesRepository, c interfaces.CryptoService) *BinariesService {
 	return &BinariesService{
-		repo:   repo,
-		crypto: crypto,
+		r: r,
+		c: c,
 	}
 }
 
 func (s *BinariesService) Get(ctx context.Context, title string, UserID int64) (*models.BinaryData, error) {
-	result, err := s.repo.Get(ctx, title, UserID)
+	result, err := s.r.Get(ctx, title, UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (s *BinariesService) Get(ctx context.Context, title string, UserID int64) (
 }
 
 func (s *BinariesService) Add(ctx context.Context, cond models.BinaryData) (int64, error) {
-	result, err := s.repo.Add(ctx, cond)
+	result, err := s.r.Add(ctx, cond)
 	if err != nil {
 		return -1, err
 	}
@@ -35,7 +35,7 @@ func (s *BinariesService) Add(ctx context.Context, cond models.BinaryData) (int6
 }
 
 func (s *BinariesService) Update(ctx context.Context, cond models.BinaryData) (int64, error) {
-	result, err := s.repo.Update(ctx, cond)
+	result, err := s.r.Update(ctx, cond)
 	if err != nil {
 		return -1, err
 	}
@@ -43,7 +43,7 @@ func (s *BinariesService) Update(ctx context.Context, cond models.BinaryData) (i
 }
 
 func (s *BinariesService) Delete(ctx context.Context, title string, UserID int64) error {
-	err := s.repo.Delete(ctx, title, UserID)
+	err := s.r.Delete(ctx, title, UserID)
 	if err != nil {
 		return err
 	}

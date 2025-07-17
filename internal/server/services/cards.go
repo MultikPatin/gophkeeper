@@ -7,19 +7,19 @@ import (
 )
 
 type CardsService struct {
-	repo   interfaces.CardsRepository
-	crypto interfaces.CryptoService
+	r interfaces.CardsRepository
+	c interfaces.CryptoService
 }
 
-func NewCardsService(repo interfaces.CardsRepository, crypto interfaces.CryptoService) *CardsService {
+func NewCardsService(r interfaces.CardsRepository, c interfaces.CryptoService) *CardsService {
 	return &CardsService{
-		repo:   repo,
-		crypto: crypto,
+		r: r,
+		c: c,
 	}
 }
 
 func (s *CardsService) Get(ctx context.Context, title string, UserID int64) (*models.Card, error) {
-	result, err := s.repo.Get(ctx, title, UserID)
+	result, err := s.r.Get(ctx, title, UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (s *CardsService) Get(ctx context.Context, title string, UserID int64) (*mo
 }
 
 func (s *CardsService) Add(ctx context.Context, cond models.Card) (int64, error) {
-	result, err := s.repo.Add(ctx, cond)
+	result, err := s.r.Add(ctx, cond)
 	if err != nil {
 		return -1, err
 	}
@@ -35,7 +35,7 @@ func (s *CardsService) Add(ctx context.Context, cond models.Card) (int64, error)
 }
 
 func (s *CardsService) Update(ctx context.Context, cond models.Card) (int64, error) {
-	result, err := s.repo.Update(ctx, cond)
+	result, err := s.r.Update(ctx, cond)
 	if err != nil {
 		return -1, err
 	}
@@ -43,7 +43,7 @@ func (s *CardsService) Update(ctx context.Context, cond models.Card) (int64, err
 }
 
 func (s *CardsService) Delete(ctx context.Context, title string, UserID int64) error {
-	err := s.repo.Delete(ctx, title, UserID)
+	err := s.r.Delete(ctx, title, UserID)
 	if err != nil {
 		return err
 	}
