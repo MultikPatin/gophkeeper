@@ -11,19 +11,22 @@ import (
 )
 
 func NewServer(s *Services, c *config.Config, l *zap.SugaredLogger) (*grpc.Server, error) {
-	jwtService, err := auth.NewJWTService(c.JWTSecret, c.JWTExpiration)
+	j, err := auth.NewJWTService(c.JWTSecret, c.JWTExpiration)
 	if err != nil {
 		return nil, err
 	}
 
 	srv := grpc.NewServer(
-		grpc.ChainUnaryInterceptor(interceptors.NewLoggerInterceptor(l)),
+		grpc.ChainUnaryInterceptor(
+			interceptors.LoggerInterceptor(l),
+			interceptors.AuthInterceptor(j),
+		),
 	)
 
-	pb.RegisterUsersServer(srv, handlers.NewUsersHandler(s.users, jwtService))
-	pb.RegisterBinariesServer(srv, handlers.NewBinariesHandler(s.binaries, jwtService))
-	pb.RegisterPasswordsServer(srv, handlers.NewPasswordsHandler(s.passwords, jwtService))
-	pb.RegisterCardsServer(srv, handlers.NewCardsHandler(s.cards, jwtService))
+	pb.RegisterUsersServer(srv, handlers.NewUsersHandler(s.users, j))
+	pb.RegisterBinariesServer(srv, handlers.NewBinariesHandler(s.binaries, j))
+	pb.RegisterPasswordsServer(srv, handlers.NewPasswordsHandler(s.passwords, j))
+	pb.RegisterCardsServer(srv, handlers.NewCardsHandler(s.cards, j))
 
 	return srv, nil
 }

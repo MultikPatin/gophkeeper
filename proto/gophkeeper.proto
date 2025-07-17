@@ -92,12 +92,12 @@ message BinariesRequest {
 message BinariesResponse {
   int64  id = 1;
   string title = 2;
-  string data = 3;
+  bytes data = 3;
 }
 
 message BinariesCreateRequest {
   string title = 1;
-  string data = 2;
+  bytes data = 2;
 }
 
 message BinariesUpdateRequest {

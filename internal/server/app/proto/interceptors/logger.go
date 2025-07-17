@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-// NewLoggerInterceptor crete a gRPC interceptor that logs requests and responses.
-func NewLoggerInterceptor(logger *zap.SugaredLogger) grpc.UnaryServerInterceptor {
+// LoggerInterceptor crete a gRPC interceptor that logs requests and responses.
+func LoggerInterceptor(logger *zap.SugaredLogger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
 		start := time.Now()
 

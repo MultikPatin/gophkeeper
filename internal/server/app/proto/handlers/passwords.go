@@ -3,8 +3,8 @@ package handlers
 import (
 	"context"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"main/internal/server/app/proto/helpers"
 	"main/internal/server/interfaces"
+	"main/internal/server/models"
 	pb "main/proto"
 )
 
@@ -22,53 +22,72 @@ func NewPasswordsHandler(s interfaces.PasswordsService, j interfaces.JWTService)
 }
 
 func (h *PasswordsHandler) Get(ctx context.Context, in *pb.PasswordRequest) (*pb.PasswordResponse, error) {
-	UserID, err := helpers.GetUserIDFromMD(ctx, h.j)
+	userID := ctx.Value("userID").(int64)
+
+	result, err := h.s.Get(ctx, in.Title, userID)
 	if err != nil {
 		return nil, err
 	}
 
-	result, err := h.s.Get(ctx, title, UserID)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
+	return &pb.PasswordResponse{
+		Id:       result.ID,
+		Title:    result.Title,
+		Login:    string(result.Login),
+		Password: string(result.Password),
+	}, nil
 }
 
 func (h *PasswordsHandler) Add(ctx context.Context, in *pb.PasswordCreateRequest) (*pb.PasswordResponse, error) {
-	UserID, err := helpers.GetUserIDFromMD(ctx, h.j)
-	if err != nil {
-		return nil, err
+	userID := ctx.Value("userID").(int64)
+
+	cond := models.Password{
+		UserID:   userID,
+		Title:    in.Title,
+		Login:    []byte(in.Login),
+		Password: []byte(in.Password),
 	}
 
 	result, err := h.s.Add(ctx, cond)
 	if err != nil {
-		return -1, err
+		return nil, err
 	}
-	return result, nil
+
+	return &pb.PasswordResponse{
+		Id:       result.ID,
+		Title:    result.Title,
+		Login:    string(result.Login),
+		Password: string(result.Password),
+	}, nil
 }
 
 func (h *PasswordsHandler) Update(ctx context.Context, in *pb.PasswordUpdateRequest) (*pb.PasswordResponse, error) {
-	UserID, err := helpers.GetUserIDFromMD(ctx, h.j)
-	if err != nil {
-		return nil, err
+	userID := ctx.Value("userID").(int64)
+
+	cond := models.Password{
+		UserID:   userID,
+		Login:    []byte(in.Login),
+		Password: []byte(in.Password),
 	}
 
 	result, err := h.s.Update(ctx, cond)
 	if err != nil {
-		return -1, err
-	}
-	return result, nil
-}
-
-func (h *PasswordsHandler) Delete(ctx context.Context, in *pb.PasswordRequest) (*emptypb.Empty, error) {
-	UserID, err := helpers.GetUserIDFromMD(ctx, h.j)
-	if err != nil {
 		return nil, err
 	}
 
-	err := h.s.Delete(ctx, ID)
+	return &pb.PasswordResponse{
+		Id:       result.ID,
+		Title:    result.Title,
+		Login:    string(result.Login),
+		Password: string(result.Password),
+	}, nil
+}
+
+func (h *PasswordsHandler) Delete(ctx context.Context, in *pb.PasswordRequest) (*emptypb.Empty, error) {
+	userID := ctx.Value("userID").(int64)
+
+	err := h.s.Delete(ctx, in.Title, userID)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }

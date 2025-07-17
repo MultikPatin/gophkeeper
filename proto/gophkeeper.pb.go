@@ -774,7 +774,7 @@ type BinariesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Data          string                 `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	Data          []byte                 `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -823,17 +823,17 @@ func (x *BinariesResponse) GetTitle() string {
 	return ""
 }
 
-func (x *BinariesResponse) GetData() string {
+func (x *BinariesResponse) GetData() []byte {
 	if x != nil {
 		return x.Data
 	}
-	return ""
+	return nil
 }
 
 type BinariesCreateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
-	Data          string                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -875,11 +875,11 @@ func (x *BinariesCreateRequest) GetTitle() string {
 	return ""
 }
 
-func (x *BinariesCreateRequest) GetData() string {
+func (x *BinariesCreateRequest) GetData() []byte {
 	if x != nil {
 		return x.Data
 	}
-	return ""
+	return nil
 }
 
 type BinariesUpdateRequest struct {
@@ -997,10 +997,10 @@ const file_proto_gophkeeper_proto_rawDesc = "" +
 	"\x10BinariesResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x12\n" +
-	"\x04data\x18\x03 \x01(\tR\x04data\"A\n" +
+	"\x04data\x18\x03 \x01(\fR\x04data\"A\n" +
 	"\x15BinariesCreateRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12\x12\n" +
-	"\x04data\x18\x02 \x01(\tR\x04data\";\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\";\n" +
 	"\x15BinariesUpdateRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04data\x18\x02 \x01(\fR\x04data2\x8c\x01\n" +
