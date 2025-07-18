@@ -171,8 +171,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PasswordsClient interface {
 	Get(ctx context.Context, in *PasswordRequest, opts ...grpc.CallOption) (*PasswordResponse, error)
-	Add(ctx context.Context, in *PasswordCreateRequest, opts ...grpc.CallOption) (*PasswordResponse, error)
-	Update(ctx context.Context, in *PasswordUpdateRequest, opts ...grpc.CallOption) (*PasswordResponse, error)
+	Add(ctx context.Context, in *PasswordCreateRequest, opts ...grpc.CallOption) (*PasswordShortResponse, error)
+	Update(ctx context.Context, in *PasswordUpdateRequest, opts ...grpc.CallOption) (*PasswordShortResponse, error)
 	Delete(ctx context.Context, in *PasswordRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -194,9 +194,9 @@ func (c *passwordsClient) Get(ctx context.Context, in *PasswordRequest, opts ...
 	return out, nil
 }
 
-func (c *passwordsClient) Add(ctx context.Context, in *PasswordCreateRequest, opts ...grpc.CallOption) (*PasswordResponse, error) {
+func (c *passwordsClient) Add(ctx context.Context, in *PasswordCreateRequest, opts ...grpc.CallOption) (*PasswordShortResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PasswordResponse)
+	out := new(PasswordShortResponse)
 	err := c.cc.Invoke(ctx, Passwords_Add_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -204,9 +204,9 @@ func (c *passwordsClient) Add(ctx context.Context, in *PasswordCreateRequest, op
 	return out, nil
 }
 
-func (c *passwordsClient) Update(ctx context.Context, in *PasswordUpdateRequest, opts ...grpc.CallOption) (*PasswordResponse, error) {
+func (c *passwordsClient) Update(ctx context.Context, in *PasswordUpdateRequest, opts ...grpc.CallOption) (*PasswordShortResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PasswordResponse)
+	out := new(PasswordShortResponse)
 	err := c.cc.Invoke(ctx, Passwords_Update_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -229,8 +229,8 @@ func (c *passwordsClient) Delete(ctx context.Context, in *PasswordRequest, opts 
 // for forward compatibility.
 type PasswordsServer interface {
 	Get(context.Context, *PasswordRequest) (*PasswordResponse, error)
-	Add(context.Context, *PasswordCreateRequest) (*PasswordResponse, error)
-	Update(context.Context, *PasswordUpdateRequest) (*PasswordResponse, error)
+	Add(context.Context, *PasswordCreateRequest) (*PasswordShortResponse, error)
+	Update(context.Context, *PasswordUpdateRequest) (*PasswordShortResponse, error)
 	Delete(context.Context, *PasswordRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedPasswordsServer()
 }
@@ -245,10 +245,10 @@ type UnimplementedPasswordsServer struct{}
 func (UnimplementedPasswordsServer) Get(context.Context, *PasswordRequest) (*PasswordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedPasswordsServer) Add(context.Context, *PasswordCreateRequest) (*PasswordResponse, error) {
+func (UnimplementedPasswordsServer) Add(context.Context, *PasswordCreateRequest) (*PasswordShortResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
 }
-func (UnimplementedPasswordsServer) Update(context.Context, *PasswordUpdateRequest) (*PasswordResponse, error) {
+func (UnimplementedPasswordsServer) Update(context.Context, *PasswordUpdateRequest) (*PasswordShortResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedPasswordsServer) Delete(context.Context, *PasswordRequest) (*emptypb.Empty, error) {
@@ -387,8 +387,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CardsClient interface {
 	Get(ctx context.Context, in *CardRequest, opts ...grpc.CallOption) (*CardResponse, error)
-	Add(ctx context.Context, in *CardCreateRequest, opts ...grpc.CallOption) (*CardResponse, error)
-	Update(ctx context.Context, in *CardUpdateRequest, opts ...grpc.CallOption) (*CardResponse, error)
+	Add(ctx context.Context, in *CardCreateRequest, opts ...grpc.CallOption) (*CardShortResponse, error)
+	Update(ctx context.Context, in *CardUpdateRequest, opts ...grpc.CallOption) (*CardShortResponse, error)
 	Delete(ctx context.Context, in *CardRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -410,9 +410,9 @@ func (c *cardsClient) Get(ctx context.Context, in *CardRequest, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *cardsClient) Add(ctx context.Context, in *CardCreateRequest, opts ...grpc.CallOption) (*CardResponse, error) {
+func (c *cardsClient) Add(ctx context.Context, in *CardCreateRequest, opts ...grpc.CallOption) (*CardShortResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CardResponse)
+	out := new(CardShortResponse)
 	err := c.cc.Invoke(ctx, Cards_Add_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -420,9 +420,9 @@ func (c *cardsClient) Add(ctx context.Context, in *CardCreateRequest, opts ...gr
 	return out, nil
 }
 
-func (c *cardsClient) Update(ctx context.Context, in *CardUpdateRequest, opts ...grpc.CallOption) (*CardResponse, error) {
+func (c *cardsClient) Update(ctx context.Context, in *CardUpdateRequest, opts ...grpc.CallOption) (*CardShortResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CardResponse)
+	out := new(CardShortResponse)
 	err := c.cc.Invoke(ctx, Cards_Update_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -445,8 +445,8 @@ func (c *cardsClient) Delete(ctx context.Context, in *CardRequest, opts ...grpc.
 // for forward compatibility.
 type CardsServer interface {
 	Get(context.Context, *CardRequest) (*CardResponse, error)
-	Add(context.Context, *CardCreateRequest) (*CardResponse, error)
-	Update(context.Context, *CardUpdateRequest) (*CardResponse, error)
+	Add(context.Context, *CardCreateRequest) (*CardShortResponse, error)
+	Update(context.Context, *CardUpdateRequest) (*CardShortResponse, error)
 	Delete(context.Context, *CardRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedCardsServer()
 }
@@ -461,10 +461,10 @@ type UnimplementedCardsServer struct{}
 func (UnimplementedCardsServer) Get(context.Context, *CardRequest) (*CardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedCardsServer) Add(context.Context, *CardCreateRequest) (*CardResponse, error) {
+func (UnimplementedCardsServer) Add(context.Context, *CardCreateRequest) (*CardShortResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
 }
-func (UnimplementedCardsServer) Update(context.Context, *CardUpdateRequest) (*CardResponse, error) {
+func (UnimplementedCardsServer) Update(context.Context, *CardUpdateRequest) (*CardShortResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedCardsServer) Delete(context.Context, *CardRequest) (*emptypb.Empty, error) {
@@ -603,8 +603,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BinariesClient interface {
 	Get(ctx context.Context, in *BinariesRequest, opts ...grpc.CallOption) (*BinariesResponse, error)
-	Add(ctx context.Context, in *BinariesCreateRequest, opts ...grpc.CallOption) (*BinariesResponse, error)
-	Update(ctx context.Context, in *BinariesUpdateRequest, opts ...grpc.CallOption) (*BinariesResponse, error)
+	Add(ctx context.Context, in *BinariesCreateRequest, opts ...grpc.CallOption) (*BinariesShortResponse, error)
+	Update(ctx context.Context, in *BinariesUpdateRequest, opts ...grpc.CallOption) (*BinariesShortResponse, error)
 	Delete(ctx context.Context, in *BinariesRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -626,9 +626,9 @@ func (c *binariesClient) Get(ctx context.Context, in *BinariesRequest, opts ...g
 	return out, nil
 }
 
-func (c *binariesClient) Add(ctx context.Context, in *BinariesCreateRequest, opts ...grpc.CallOption) (*BinariesResponse, error) {
+func (c *binariesClient) Add(ctx context.Context, in *BinariesCreateRequest, opts ...grpc.CallOption) (*BinariesShortResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(BinariesResponse)
+	out := new(BinariesShortResponse)
 	err := c.cc.Invoke(ctx, Binaries_Add_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -636,9 +636,9 @@ func (c *binariesClient) Add(ctx context.Context, in *BinariesCreateRequest, opt
 	return out, nil
 }
 
-func (c *binariesClient) Update(ctx context.Context, in *BinariesUpdateRequest, opts ...grpc.CallOption) (*BinariesResponse, error) {
+func (c *binariesClient) Update(ctx context.Context, in *BinariesUpdateRequest, opts ...grpc.CallOption) (*BinariesShortResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(BinariesResponse)
+	out := new(BinariesShortResponse)
 	err := c.cc.Invoke(ctx, Binaries_Update_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -661,8 +661,8 @@ func (c *binariesClient) Delete(ctx context.Context, in *BinariesRequest, opts .
 // for forward compatibility.
 type BinariesServer interface {
 	Get(context.Context, *BinariesRequest) (*BinariesResponse, error)
-	Add(context.Context, *BinariesCreateRequest) (*BinariesResponse, error)
-	Update(context.Context, *BinariesUpdateRequest) (*BinariesResponse, error)
+	Add(context.Context, *BinariesCreateRequest) (*BinariesShortResponse, error)
+	Update(context.Context, *BinariesUpdateRequest) (*BinariesShortResponse, error)
 	Delete(context.Context, *BinariesRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedBinariesServer()
 }
@@ -677,10 +677,10 @@ type UnimplementedBinariesServer struct{}
 func (UnimplementedBinariesServer) Get(context.Context, *BinariesRequest) (*BinariesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedBinariesServer) Add(context.Context, *BinariesCreateRequest) (*BinariesResponse, error) {
+func (UnimplementedBinariesServer) Add(context.Context, *BinariesCreateRequest) (*BinariesShortResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
 }
-func (UnimplementedBinariesServer) Update(context.Context, *BinariesUpdateRequest) (*BinariesResponse, error) {
+func (UnimplementedBinariesServer) Update(context.Context, *BinariesUpdateRequest) (*BinariesShortResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedBinariesServer) Delete(context.Context, *BinariesRequest) (*emptypb.Empty, error) {

@@ -23,22 +23,43 @@ func (s *BinariesService) Get(ctx context.Context, title string, UserID int64) (
 	if err != nil {
 		return nil, err
 	}
+
+	result, err = s.decrypt(result)
+	if err != nil {
+		return nil, err
+	}
 	return result, nil
 }
 
-func (s *BinariesService) Add(ctx context.Context, cond models.BinaryData) (int64, error) {
+func (s *BinariesService) Add(ctx context.Context, cond models.BinaryData) (string, error) {
+	var err error
+
+	cond, err = s.encrypt(cond)
+	if err != nil {
+		return "", err
+	}
+
 	result, err := s.r.Add(ctx, cond)
 	if err != nil {
-		return -1, err
+		return "", err
 	}
+
 	return result, nil
 }
 
-func (s *BinariesService) Update(ctx context.Context, cond models.BinaryData) (int64, error) {
+func (s *BinariesService) Update(ctx context.Context, cond models.BinaryData) (string, error) {
+	var err error
+
+	cond, err = s.encrypt(cond)
+	if err != nil {
+		return "", err
+	}
+
 	result, err := s.r.Update(ctx, cond)
 	if err != nil {
-		return -1, err
+		return "", err
 	}
+
 	return result, nil
 }
 
@@ -48,4 +69,26 @@ func (s *BinariesService) Delete(ctx context.Context, title string, UserID int64
 		return err
 	}
 	return nil
+}
+
+func (s *BinariesService) decrypt(result *models.BinaryData) (*models.BinaryData, error) {
+	var err error
+
+	result.Data, err = s.c.Decrypt(result.Data)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (s *BinariesService) encrypt(cond models.BinaryData) (models.BinaryData, error) {
+	var err error
+
+	cond.Data, err = s.c.Encrypt(cond.Data)
+	if err != nil {
+		return models.BinaryData{}, err
+	}
+
+	return cond, nil
 }

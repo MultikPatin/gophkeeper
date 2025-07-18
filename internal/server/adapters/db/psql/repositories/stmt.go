@@ -72,7 +72,7 @@ const (
 	addPassword = `
 			INSERT INTO passwords (title, user_id, login, password)
 			VALUES ($1, $2, $3, $4) 
-			RETURNING id`
+			RETURNING title`
 	getPassword = `
 			SELECT id, title, user_id, login, password
 			FROM passwords 
@@ -85,12 +85,12 @@ const (
 			UPDATE passwords 
 			SET login = $1, password = $2 
 			WHERE title = $3 AND user_id = $4
-			RETURNING id`
+			RETURNING title`
 	// Binaries
 	addBinary = `
 			INSERT INTO binaries (title, user_id, data) 
 			VALUES ($1, $2, $3) 
-			RETURNING id`
+			RETURNING title`
 	getBinary = `
 			SELECT id, title, user_id, data
 			FROM binaries 
@@ -103,12 +103,12 @@ const (
 			UPDATE binaries 
 			SET data = $1 
 			WHERE title = $2 AND user_id = $3
-			RETURNING id`
+			RETURNING title`
 	// Cards
 	addCard = `
 			INSERT INTO cards (title, user_id, bank, number, data_end, secret_code) 
 			VALUES ($1, $2, $3, $4, $5, $6) 
-			RETURNING id`
+			RETURNING title`
 	getCard = `
 			SELECT id, title, user_id, bank, number, data_end, secret_code 
 			FROM cards 
@@ -121,5 +121,5 @@ const (
 			UPDATE cards 
 			SET bank = $1, number = $2, data_end = $3, secret_code = $4  
 			WHERE title = $5 AND user_id = $6
-			RETURNING id`
+			RETURNING title`
 )

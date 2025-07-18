@@ -35,7 +35,7 @@ func (h *BinariesHandler) Get(ctx context.Context, in *pb.BinariesRequest) (*pb.
 	}, nil
 }
 
-func (h *BinariesHandler) Add(ctx context.Context, in *pb.BinariesCreateRequest) (*pb.BinariesResponse, error) {
+func (h *BinariesHandler) Add(ctx context.Context, in *pb.BinariesCreateRequest) (*pb.BinariesShortResponse, error) {
 	userID := ctx.Value("userID").(int64)
 
 	cond := models.BinaryData{
@@ -49,14 +49,12 @@ func (h *BinariesHandler) Add(ctx context.Context, in *pb.BinariesCreateRequest)
 		return nil, err
 	}
 
-	return &pb.BinariesResponse{
-		Id:    result.ID,
-		Title: result.Title,
-		Data:  result.Data,
+	return &pb.BinariesShortResponse{
+		Title: result,
 	}, nil
 }
 
-func (h *BinariesHandler) Update(ctx context.Context, in *pb.BinariesUpdateRequest) (*pb.BinariesResponse, error) {
+func (h *BinariesHandler) Update(ctx context.Context, in *pb.BinariesUpdateRequest) (*pb.BinariesShortResponse, error) {
 	userID := ctx.Value("userID").(int64)
 
 	cond := models.BinaryData{
@@ -69,10 +67,8 @@ func (h *BinariesHandler) Update(ctx context.Context, in *pb.BinariesUpdateReque
 		return nil, err
 	}
 
-	return &pb.BinariesResponse{
-		Id:    result.ID,
-		Title: result.Title,
-		Data:  result.Data,
+	return &pb.BinariesShortResponse{
+		Title: result,
 	}, nil
 }
 

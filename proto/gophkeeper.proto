@@ -40,6 +40,10 @@ message PasswordResponse {
   string password = 4;
 }
 
+message PasswordShortResponse {
+  string title = 2;
+}
+
 message PasswordCreateRequest {
   string title = 1;
   string login = 2;
@@ -65,6 +69,10 @@ message CardResponse {
   string number = 4;
   string dataEnd = 5;
   string secretCode = 6;
+}
+
+message CardShortResponse {
+  string title = 2;
 }
 
 message CardCreateRequest {
@@ -95,6 +103,10 @@ message BinariesResponse {
   bytes data = 3;
 }
 
+message BinariesShortResponse {
+  string title = 2;
+}
+
 message BinariesCreateRequest {
   string title = 1;
   bytes data = 2;
@@ -114,21 +126,21 @@ service Users {
 
 service Passwords {
   rpc Get(PasswordRequest) returns (PasswordResponse);
-  rpc Add(PasswordCreateRequest) returns (PasswordResponse);
-  rpc Update(PasswordUpdateRequest) returns (PasswordResponse);
+  rpc Add(PasswordCreateRequest) returns (PasswordShortResponse);
+  rpc Update(PasswordUpdateRequest) returns (PasswordShortResponse);
   rpc Delete(PasswordRequest) returns (google.protobuf.Empty);
 }
 
 service Cards {
   rpc Get(CardRequest) returns (CardResponse);
-  rpc Add(CardCreateRequest) returns (CardResponse);
-  rpc Update(CardUpdateRequest) returns (CardResponse);
+  rpc Add(CardCreateRequest) returns (CardShortResponse);
+  rpc Update(CardUpdateRequest) returns (CardShortResponse);
   rpc Delete(CardRequest) returns (google.protobuf.Empty);
 }
 
 service Binaries {
   rpc Get(BinariesRequest) returns (BinariesResponse);
-  rpc Add(BinariesCreateRequest) returns (BinariesResponse);
-  rpc Update(BinariesUpdateRequest) returns (BinariesResponse);
+  rpc Add(BinariesCreateRequest) returns (BinariesShortResponse);
+  rpc Update(BinariesUpdateRequest) returns (BinariesShortResponse);
   rpc Delete(BinariesRequest) returns (google.protobuf.Empty);
 }

@@ -39,7 +39,7 @@ func (h *CardsHandler) Get(ctx context.Context, in *pb.CardRequest) (*pb.CardRes
 	}, nil
 }
 
-func (h *CardsHandler) Add(ctx context.Context, in *pb.CardCreateRequest) (*pb.CardResponse, error) {
+func (h *CardsHandler) Add(ctx context.Context, in *pb.CardCreateRequest) (*pb.CardShortResponse, error) {
 	userID := ctx.Value("userID").(int64)
 	cond := models.Card{
 		Title:      in.Title,
@@ -55,17 +55,12 @@ func (h *CardsHandler) Add(ctx context.Context, in *pb.CardCreateRequest) (*pb.C
 		return nil, err
 	}
 
-	return &pb.CardResponse{
-		Id:         result.ID,
-		Title:      result.Title,
-		Bank:       string(result.Bank),
-		Number:     string(result.Number),
-		DataEnd:    string(result.DataEnd),
-		SecretCode: string(result.SecretCode),
+	return &pb.CardShortResponse{
+		Title: result,
 	}, nil
 }
 
-func (h *CardsHandler) Update(ctx context.Context, in *pb.CardUpdateRequest) (*pb.CardResponse, error) {
+func (h *CardsHandler) Update(ctx context.Context, in *pb.CardUpdateRequest) (*pb.CardShortResponse, error) {
 	userID := ctx.Value("userID").(int64)
 
 	cond := models.Card{
@@ -81,13 +76,8 @@ func (h *CardsHandler) Update(ctx context.Context, in *pb.CardUpdateRequest) (*p
 		return nil, err
 	}
 
-	return &pb.CardResponse{
-		Id:         result.ID,
-		Title:      result.Title,
-		Bank:       string(result.Bank),
-		Number:     string(result.Number),
-		DataEnd:    string(result.DataEnd),
-		SecretCode: string(result.SecretCode),
+	return &pb.CardShortResponse{
+		Title: result,
 	}, nil
 }
 

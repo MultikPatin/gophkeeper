@@ -27,24 +27,24 @@ func (r *PasswordsRepository) Get(ctx context.Context, title string, UserID int6
 	return &result, nil
 }
 
-func (r *PasswordsRepository) Add(ctx context.Context, cond models.Password) (int64, error) {
-	var ID int64
+func (r *PasswordsRepository) Add(ctx context.Context, cond models.Password) (string, error) {
+	var title string
 
-	err := r.db.Conn.QueryRowContext(ctx, stmt.password.add, cond.Title, cond.UserID, cond.Login, cond.Password).Scan(&ID)
+	err := r.db.Conn.QueryRowContext(ctx, stmt.password.add, cond.Title, cond.UserID, cond.Login, cond.Password).Scan(&title)
 	if err != nil {
-		return -1, err
+		return "", err
 	}
-	return ID, nil
+	return title, nil
 }
 
-func (r *PasswordsRepository) Update(ctx context.Context, cond models.Password) (int64, error) {
-	var ID int64
+func (r *PasswordsRepository) Update(ctx context.Context, cond models.Password) (string, error) {
+	var title string
 
-	err := r.db.Conn.QueryRowContext(ctx, stmt.password.update, cond.Login, cond.Password, cond.Title, cond.UserID).Scan(&ID)
+	err := r.db.Conn.QueryRowContext(ctx, stmt.password.update, cond.Login, cond.Password, cond.Title, cond.UserID).Scan(&title)
 	if err != nil {
-		return -1, err
+		return "", err
 	}
-	return ID, nil
+	return title, nil
 }
 
 func (r *PasswordsRepository) Delete(ctx context.Context, title string, UserID int64) error {

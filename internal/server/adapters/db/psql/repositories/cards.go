@@ -27,24 +27,24 @@ func (r *CardsRepository) Get(ctx context.Context, title string, UserID int64) (
 	return &result, nil
 }
 
-func (r *CardsRepository) Add(ctx context.Context, cond models.Card) (int64, error) {
-	var ID int64
+func (r *CardsRepository) Add(ctx context.Context, cond models.Card) (string, error) {
+	var title string
 
-	err := r.db.Conn.QueryRowContext(ctx, stmt.card.add, cond.Title, cond.UserID, cond.Bank, cond.Number, cond.DataEnd, cond.SecretCode).Scan(&ID)
+	err := r.db.Conn.QueryRowContext(ctx, stmt.card.add, cond.Title, cond.UserID, cond.Bank, cond.Number, cond.DataEnd, cond.SecretCode).Scan(&title)
 	if err != nil {
-		return -1, err
+		return "", err
 	}
-	return ID, nil
+	return title, nil
 }
 
-func (r *CardsRepository) Update(ctx context.Context, cond models.Card) (int64, error) {
-	var ID int64
+func (r *CardsRepository) Update(ctx context.Context, cond models.Card) (string, error) {
+	var title string
 
-	err := r.db.Conn.QueryRowContext(ctx, stmt.card.update, cond.Bank, cond.Number, cond.DataEnd, cond.SecretCode, cond.Title, cond.UserID).Scan(&ID)
+	err := r.db.Conn.QueryRowContext(ctx, stmt.card.update, cond.Bank, cond.Number, cond.DataEnd, cond.SecretCode, cond.Title, cond.UserID).Scan(&title)
 	if err != nil {
-		return -1, err
+		return "", err
 	}
-	return ID, nil
+	return title, nil
 }
 
 func (r *CardsRepository) Delete(ctx context.Context, title string, UserID int64) error {

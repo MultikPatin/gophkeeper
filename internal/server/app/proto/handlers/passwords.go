@@ -37,7 +37,7 @@ func (h *PasswordsHandler) Get(ctx context.Context, in *pb.PasswordRequest) (*pb
 	}, nil
 }
 
-func (h *PasswordsHandler) Add(ctx context.Context, in *pb.PasswordCreateRequest) (*pb.PasswordResponse, error) {
+func (h *PasswordsHandler) Add(ctx context.Context, in *pb.PasswordCreateRequest) (*pb.PasswordShortResponse, error) {
 	userID := ctx.Value("userID").(int64)
 
 	cond := models.Password{
@@ -52,15 +52,12 @@ func (h *PasswordsHandler) Add(ctx context.Context, in *pb.PasswordCreateRequest
 		return nil, err
 	}
 
-	return &pb.PasswordResponse{
-		Id:       result.ID,
-		Title:    result.Title,
-		Login:    string(result.Login),
-		Password: string(result.Password),
+	return &pb.PasswordShortResponse{
+		Title: result,
 	}, nil
 }
 
-func (h *PasswordsHandler) Update(ctx context.Context, in *pb.PasswordUpdateRequest) (*pb.PasswordResponse, error) {
+func (h *PasswordsHandler) Update(ctx context.Context, in *pb.PasswordUpdateRequest) (*pb.PasswordShortResponse, error) {
 	userID := ctx.Value("userID").(int64)
 
 	cond := models.Password{
@@ -74,11 +71,8 @@ func (h *PasswordsHandler) Update(ctx context.Context, in *pb.PasswordUpdateRequ
 		return nil, err
 	}
 
-	return &pb.PasswordResponse{
-		Id:       result.ID,
-		Title:    result.Title,
-		Login:    string(result.Login),
-		Password: string(result.Password),
+	return &pb.PasswordShortResponse{
+		Title: result,
 	}, nil
 }
 

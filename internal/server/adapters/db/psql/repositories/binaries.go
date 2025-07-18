@@ -27,24 +27,24 @@ func (r *BinariesRepository) Get(ctx context.Context, title string, UserID int64
 	return &result, nil
 }
 
-func (r *BinariesRepository) Add(ctx context.Context, cond models.BinaryData) (int64, error) {
-	var ID int64
+func (r *BinariesRepository) Add(ctx context.Context, cond models.BinaryData) (string, error) {
+	var title string
 
-	err := r.db.Conn.QueryRowContext(ctx, stmt.binary.add, cond.Title, cond.UserID, cond.Data).Scan(&ID)
+	err := r.db.Conn.QueryRowContext(ctx, stmt.binary.add, cond.Title, cond.UserID, cond.Data).Scan(&title)
 	if err != nil {
-		return -1, err
+		return "", err
 	}
-	return ID, nil
+	return title, nil
 }
 
-func (r *BinariesRepository) Update(ctx context.Context, cond models.BinaryData) (int64, error) {
-	var ID int64
+func (r *BinariesRepository) Update(ctx context.Context, cond models.BinaryData) (string, error) {
+	var title string
 
-	err := r.db.Conn.QueryRowContext(ctx, stmt.binary.update, cond.Data, cond.Title, cond.UserID).Scan(&ID)
+	err := r.db.Conn.QueryRowContext(ctx, stmt.binary.update, cond.Data, cond.Title, cond.UserID).Scan(&title)
 	if err != nil {
-		return -1, err
+		return "", err
 	}
-	return ID, nil
+	return title, nil
 }
 
 func (r *BinariesRepository) Delete(ctx context.Context, title string, UserID int64) error {

@@ -326,6 +326,50 @@ func (x *PasswordResponse) GetPassword() string {
 	return ""
 }
 
+type PasswordShortResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PasswordShortResponse) Reset() {
+	*x = PasswordShortResponse{}
+	mi := &file_proto_gophkeeper_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PasswordShortResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PasswordShortResponse) ProtoMessage() {}
+
+func (x *PasswordShortResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_gophkeeper_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PasswordShortResponse.ProtoReflect.Descriptor instead.
+func (*PasswordShortResponse) Descriptor() ([]byte, []int) {
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *PasswordShortResponse) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
 type PasswordCreateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
@@ -337,7 +381,7 @@ type PasswordCreateRequest struct {
 
 func (x *PasswordCreateRequest) Reset() {
 	*x = PasswordCreateRequest{}
-	mi := &file_proto_gophkeeper_proto_msgTypes[6]
+	mi := &file_proto_gophkeeper_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -349,7 +393,7 @@ func (x *PasswordCreateRequest) String() string {
 func (*PasswordCreateRequest) ProtoMessage() {}
 
 func (x *PasswordCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gophkeeper_proto_msgTypes[6]
+	mi := &file_proto_gophkeeper_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -362,7 +406,7 @@ func (x *PasswordCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordCreateRequest.ProtoReflect.Descriptor instead.
 func (*PasswordCreateRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{6}
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *PasswordCreateRequest) GetTitle() string {
@@ -397,7 +441,7 @@ type PasswordUpdateRequest struct {
 
 func (x *PasswordUpdateRequest) Reset() {
 	*x = PasswordUpdateRequest{}
-	mi := &file_proto_gophkeeper_proto_msgTypes[7]
+	mi := &file_proto_gophkeeper_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -409,7 +453,7 @@ func (x *PasswordUpdateRequest) String() string {
 func (*PasswordUpdateRequest) ProtoMessage() {}
 
 func (x *PasswordUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gophkeeper_proto_msgTypes[7]
+	mi := &file_proto_gophkeeper_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -422,7 +466,7 @@ func (x *PasswordUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordUpdateRequest.ProtoReflect.Descriptor instead.
 func (*PasswordUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{7}
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *PasswordUpdateRequest) GetId() int64 {
@@ -455,7 +499,7 @@ type CardRequest struct {
 
 func (x *CardRequest) Reset() {
 	*x = CardRequest{}
-	mi := &file_proto_gophkeeper_proto_msgTypes[8]
+	mi := &file_proto_gophkeeper_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -467,7 +511,7 @@ func (x *CardRequest) String() string {
 func (*CardRequest) ProtoMessage() {}
 
 func (x *CardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gophkeeper_proto_msgTypes[8]
+	mi := &file_proto_gophkeeper_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -480,7 +524,7 @@ func (x *CardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CardRequest.ProtoReflect.Descriptor instead.
 func (*CardRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{8}
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *CardRequest) GetTitle() string {
@@ -504,7 +548,7 @@ type CardResponse struct {
 
 func (x *CardResponse) Reset() {
 	*x = CardResponse{}
-	mi := &file_proto_gophkeeper_proto_msgTypes[9]
+	mi := &file_proto_gophkeeper_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -516,7 +560,7 @@ func (x *CardResponse) String() string {
 func (*CardResponse) ProtoMessage() {}
 
 func (x *CardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gophkeeper_proto_msgTypes[9]
+	mi := &file_proto_gophkeeper_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -529,7 +573,7 @@ func (x *CardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CardResponse.ProtoReflect.Descriptor instead.
 func (*CardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{9}
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *CardResponse) GetId() int64 {
@@ -574,6 +618,50 @@ func (x *CardResponse) GetSecretCode() string {
 	return ""
 }
 
+type CardShortResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CardShortResponse) Reset() {
+	*x = CardShortResponse{}
+	mi := &file_proto_gophkeeper_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CardShortResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CardShortResponse) ProtoMessage() {}
+
+func (x *CardShortResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_gophkeeper_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CardShortResponse.ProtoReflect.Descriptor instead.
+func (*CardShortResponse) Descriptor() ([]byte, []int) {
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CardShortResponse) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
 type CardCreateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
@@ -587,7 +675,7 @@ type CardCreateRequest struct {
 
 func (x *CardCreateRequest) Reset() {
 	*x = CardCreateRequest{}
-	mi := &file_proto_gophkeeper_proto_msgTypes[10]
+	mi := &file_proto_gophkeeper_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -599,7 +687,7 @@ func (x *CardCreateRequest) String() string {
 func (*CardCreateRequest) ProtoMessage() {}
 
 func (x *CardCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gophkeeper_proto_msgTypes[10]
+	mi := &file_proto_gophkeeper_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -612,7 +700,7 @@ func (x *CardCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CardCreateRequest.ProtoReflect.Descriptor instead.
 func (*CardCreateRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{10}
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *CardCreateRequest) GetTitle() string {
@@ -663,7 +751,7 @@ type CardUpdateRequest struct {
 
 func (x *CardUpdateRequest) Reset() {
 	*x = CardUpdateRequest{}
-	mi := &file_proto_gophkeeper_proto_msgTypes[11]
+	mi := &file_proto_gophkeeper_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -675,7 +763,7 @@ func (x *CardUpdateRequest) String() string {
 func (*CardUpdateRequest) ProtoMessage() {}
 
 func (x *CardUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gophkeeper_proto_msgTypes[11]
+	mi := &file_proto_gophkeeper_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -688,7 +776,7 @@ func (x *CardUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CardUpdateRequest.ProtoReflect.Descriptor instead.
 func (*CardUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{11}
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CardUpdateRequest) GetId() int64 {
@@ -735,7 +823,7 @@ type BinariesRequest struct {
 
 func (x *BinariesRequest) Reset() {
 	*x = BinariesRequest{}
-	mi := &file_proto_gophkeeper_proto_msgTypes[12]
+	mi := &file_proto_gophkeeper_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -747,7 +835,7 @@ func (x *BinariesRequest) String() string {
 func (*BinariesRequest) ProtoMessage() {}
 
 func (x *BinariesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gophkeeper_proto_msgTypes[12]
+	mi := &file_proto_gophkeeper_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -760,7 +848,7 @@ func (x *BinariesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BinariesRequest.ProtoReflect.Descriptor instead.
 func (*BinariesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{12}
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *BinariesRequest) GetTitle() string {
@@ -781,7 +869,7 @@ type BinariesResponse struct {
 
 func (x *BinariesResponse) Reset() {
 	*x = BinariesResponse{}
-	mi := &file_proto_gophkeeper_proto_msgTypes[13]
+	mi := &file_proto_gophkeeper_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -793,7 +881,7 @@ func (x *BinariesResponse) String() string {
 func (*BinariesResponse) ProtoMessage() {}
 
 func (x *BinariesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gophkeeper_proto_msgTypes[13]
+	mi := &file_proto_gophkeeper_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -806,7 +894,7 @@ func (x *BinariesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BinariesResponse.ProtoReflect.Descriptor instead.
 func (*BinariesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{13}
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *BinariesResponse) GetId() int64 {
@@ -830,6 +918,50 @@ func (x *BinariesResponse) GetData() []byte {
 	return nil
 }
 
+type BinariesShortResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BinariesShortResponse) Reset() {
+	*x = BinariesShortResponse{}
+	mi := &file_proto_gophkeeper_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BinariesShortResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BinariesShortResponse) ProtoMessage() {}
+
+func (x *BinariesShortResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_gophkeeper_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BinariesShortResponse.ProtoReflect.Descriptor instead.
+func (*BinariesShortResponse) Descriptor() ([]byte, []int) {
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *BinariesShortResponse) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
 type BinariesCreateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
@@ -840,7 +972,7 @@ type BinariesCreateRequest struct {
 
 func (x *BinariesCreateRequest) Reset() {
 	*x = BinariesCreateRequest{}
-	mi := &file_proto_gophkeeper_proto_msgTypes[14]
+	mi := &file_proto_gophkeeper_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -852,7 +984,7 @@ func (x *BinariesCreateRequest) String() string {
 func (*BinariesCreateRequest) ProtoMessage() {}
 
 func (x *BinariesCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gophkeeper_proto_msgTypes[14]
+	mi := &file_proto_gophkeeper_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -865,7 +997,7 @@ func (x *BinariesCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BinariesCreateRequest.ProtoReflect.Descriptor instead.
 func (*BinariesCreateRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{14}
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *BinariesCreateRequest) GetTitle() string {
@@ -892,7 +1024,7 @@ type BinariesUpdateRequest struct {
 
 func (x *BinariesUpdateRequest) Reset() {
 	*x = BinariesUpdateRequest{}
-	mi := &file_proto_gophkeeper_proto_msgTypes[15]
+	mi := &file_proto_gophkeeper_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -904,7 +1036,7 @@ func (x *BinariesUpdateRequest) String() string {
 func (*BinariesUpdateRequest) ProtoMessage() {}
 
 func (x *BinariesUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_gophkeeper_proto_msgTypes[15]
+	mi := &file_proto_gophkeeper_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -917,7 +1049,7 @@ func (x *BinariesUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BinariesUpdateRequest.ProtoReflect.Descriptor instead.
 func (*BinariesUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{15}
+	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *BinariesUpdateRequest) GetId() int64 {
@@ -956,7 +1088,9 @@ const file_proto_gophkeeper_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x14\n" +
 	"\x05login\x18\x03 \x01(\tR\x05login\x12\x1a\n" +
-	"\bpassword\x18\x04 \x01(\tR\bpassword\"_\n" +
+	"\bpassword\x18\x04 \x01(\tR\bpassword\"-\n" +
+	"\x15PasswordShortResponse\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\"_\n" +
 	"\x15PasswordCreateRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12\x14\n" +
 	"\x05login\x18\x02 \x01(\tR\x05login\x12\x1a\n" +
@@ -975,7 +1109,9 @@ const file_proto_gophkeeper_proto_rawDesc = "" +
 	"\adataEnd\x18\x05 \x01(\tR\adataEnd\x12\x1e\n" +
 	"\n" +
 	"secretCode\x18\x06 \x01(\tR\n" +
-	"secretCode\"\x8f\x01\n" +
+	"secretCode\")\n" +
+	"\x11CardShortResponse\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\"\x8f\x01\n" +
 	"\x11CardCreateRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12\x12\n" +
 	"\x04bank\x18\x03 \x01(\tR\x04bank\x12\x16\n" +
@@ -997,7 +1133,9 @@ const file_proto_gophkeeper_proto_rawDesc = "" +
 	"\x10BinariesResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x12\n" +
-	"\x04data\x18\x03 \x01(\fR\x04data\"A\n" +
+	"\x04data\x18\x03 \x01(\fR\x04data\"-\n" +
+	"\x15BinariesShortResponse\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\"A\n" +
 	"\x15BinariesCreateRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12\x12\n" +
 	"\x04data\x18\x02 \x01(\fR\x04data\";\n" +
@@ -1006,21 +1144,21 @@ const file_proto_gophkeeper_proto_rawDesc = "" +
 	"\x04data\x18\x02 \x01(\fR\x04data2\x8c\x01\n" +
 	"\x05Users\x12E\n" +
 	"\bRegister\x12\x1b.gophkeeper.RegisterRequest\x1a\x1c.gophkeeper.RegisterResponse\x12<\n" +
-	"\x05Login\x12\x18.gophkeeper.LoginRequest\x1a\x19.gophkeeper.LoginResponse2\x9f\x02\n" +
+	"\x05Login\x12\x18.gophkeeper.LoginRequest\x1a\x19.gophkeeper.LoginResponse2\xa9\x02\n" +
 	"\tPasswords\x12@\n" +
-	"\x03Get\x12\x1b.gophkeeper.PasswordRequest\x1a\x1c.gophkeeper.PasswordResponse\x12F\n" +
-	"\x03Add\x12!.gophkeeper.PasswordCreateRequest\x1a\x1c.gophkeeper.PasswordResponse\x12I\n" +
-	"\x06Update\x12!.gophkeeper.PasswordUpdateRequest\x1a\x1c.gophkeeper.PasswordResponse\x12=\n" +
-	"\x06Delete\x12\x1b.gophkeeper.PasswordRequest\x1a\x16.google.protobuf.Empty2\xff\x01\n" +
+	"\x03Get\x12\x1b.gophkeeper.PasswordRequest\x1a\x1c.gophkeeper.PasswordResponse\x12K\n" +
+	"\x03Add\x12!.gophkeeper.PasswordCreateRequest\x1a!.gophkeeper.PasswordShortResponse\x12N\n" +
+	"\x06Update\x12!.gophkeeper.PasswordUpdateRequest\x1a!.gophkeeper.PasswordShortResponse\x12=\n" +
+	"\x06Delete\x12\x1b.gophkeeper.PasswordRequest\x1a\x16.google.protobuf.Empty2\x89\x02\n" +
 	"\x05Cards\x128\n" +
-	"\x03Get\x12\x17.gophkeeper.CardRequest\x1a\x18.gophkeeper.CardResponse\x12>\n" +
-	"\x03Add\x12\x1d.gophkeeper.CardCreateRequest\x1a\x18.gophkeeper.CardResponse\x12A\n" +
-	"\x06Update\x12\x1d.gophkeeper.CardUpdateRequest\x1a\x18.gophkeeper.CardResponse\x129\n" +
-	"\x06Delete\x12\x17.gophkeeper.CardRequest\x1a\x16.google.protobuf.Empty2\x9e\x02\n" +
+	"\x03Get\x12\x17.gophkeeper.CardRequest\x1a\x18.gophkeeper.CardResponse\x12C\n" +
+	"\x03Add\x12\x1d.gophkeeper.CardCreateRequest\x1a\x1d.gophkeeper.CardShortResponse\x12F\n" +
+	"\x06Update\x12\x1d.gophkeeper.CardUpdateRequest\x1a\x1d.gophkeeper.CardShortResponse\x129\n" +
+	"\x06Delete\x12\x17.gophkeeper.CardRequest\x1a\x16.google.protobuf.Empty2\xa8\x02\n" +
 	"\bBinaries\x12@\n" +
-	"\x03Get\x12\x1b.gophkeeper.BinariesRequest\x1a\x1c.gophkeeper.BinariesResponse\x12F\n" +
-	"\x03Add\x12!.gophkeeper.BinariesCreateRequest\x1a\x1c.gophkeeper.BinariesResponse\x12I\n" +
-	"\x06Update\x12!.gophkeeper.BinariesUpdateRequest\x1a\x1c.gophkeeper.BinariesResponse\x12=\n" +
+	"\x03Get\x12\x1b.gophkeeper.BinariesRequest\x1a\x1c.gophkeeper.BinariesResponse\x12K\n" +
+	"\x03Add\x12!.gophkeeper.BinariesCreateRequest\x1a!.gophkeeper.BinariesShortResponse\x12N\n" +
+	"\x06Update\x12!.gophkeeper.BinariesUpdateRequest\x1a!.gophkeeper.BinariesShortResponse\x12=\n" +
 	"\x06Delete\x12\x1b.gophkeeper.BinariesRequest\x1a\x16.google.protobuf.EmptyB)Z'github.com/MultikPatin/gophkeeper/protob\x06proto3"
 
 var (
@@ -1035,7 +1173,7 @@ func file_proto_gophkeeper_proto_rawDescGZIP() []byte {
 	return file_proto_gophkeeper_proto_rawDescData
 }
 
-var file_proto_gophkeeper_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_proto_gophkeeper_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_proto_gophkeeper_proto_goTypes = []any{
 	(*RegisterRequest)(nil),       // 0: gophkeeper.RegisterRequest
 	(*RegisterResponse)(nil),      // 1: gophkeeper.RegisterResponse
@@ -1043,47 +1181,50 @@ var file_proto_gophkeeper_proto_goTypes = []any{
 	(*LoginResponse)(nil),         // 3: gophkeeper.LoginResponse
 	(*PasswordRequest)(nil),       // 4: gophkeeper.PasswordRequest
 	(*PasswordResponse)(nil),      // 5: gophkeeper.PasswordResponse
-	(*PasswordCreateRequest)(nil), // 6: gophkeeper.PasswordCreateRequest
-	(*PasswordUpdateRequest)(nil), // 7: gophkeeper.PasswordUpdateRequest
-	(*CardRequest)(nil),           // 8: gophkeeper.CardRequest
-	(*CardResponse)(nil),          // 9: gophkeeper.CardResponse
-	(*CardCreateRequest)(nil),     // 10: gophkeeper.CardCreateRequest
-	(*CardUpdateRequest)(nil),     // 11: gophkeeper.CardUpdateRequest
-	(*BinariesRequest)(nil),       // 12: gophkeeper.BinariesRequest
-	(*BinariesResponse)(nil),      // 13: gophkeeper.BinariesResponse
-	(*BinariesCreateRequest)(nil), // 14: gophkeeper.BinariesCreateRequest
-	(*BinariesUpdateRequest)(nil), // 15: gophkeeper.BinariesUpdateRequest
-	(*emptypb.Empty)(nil),         // 16: google.protobuf.Empty
+	(*PasswordShortResponse)(nil), // 6: gophkeeper.PasswordShortResponse
+	(*PasswordCreateRequest)(nil), // 7: gophkeeper.PasswordCreateRequest
+	(*PasswordUpdateRequest)(nil), // 8: gophkeeper.PasswordUpdateRequest
+	(*CardRequest)(nil),           // 9: gophkeeper.CardRequest
+	(*CardResponse)(nil),          // 10: gophkeeper.CardResponse
+	(*CardShortResponse)(nil),     // 11: gophkeeper.CardShortResponse
+	(*CardCreateRequest)(nil),     // 12: gophkeeper.CardCreateRequest
+	(*CardUpdateRequest)(nil),     // 13: gophkeeper.CardUpdateRequest
+	(*BinariesRequest)(nil),       // 14: gophkeeper.BinariesRequest
+	(*BinariesResponse)(nil),      // 15: gophkeeper.BinariesResponse
+	(*BinariesShortResponse)(nil), // 16: gophkeeper.BinariesShortResponse
+	(*BinariesCreateRequest)(nil), // 17: gophkeeper.BinariesCreateRequest
+	(*BinariesUpdateRequest)(nil), // 18: gophkeeper.BinariesUpdateRequest
+	(*emptypb.Empty)(nil),         // 19: google.protobuf.Empty
 }
 var file_proto_gophkeeper_proto_depIdxs = []int32{
 	0,  // 0: gophkeeper.Users.Register:input_type -> gophkeeper.RegisterRequest
 	2,  // 1: gophkeeper.Users.Login:input_type -> gophkeeper.LoginRequest
 	4,  // 2: gophkeeper.Passwords.Get:input_type -> gophkeeper.PasswordRequest
-	6,  // 3: gophkeeper.Passwords.Add:input_type -> gophkeeper.PasswordCreateRequest
-	7,  // 4: gophkeeper.Passwords.Update:input_type -> gophkeeper.PasswordUpdateRequest
+	7,  // 3: gophkeeper.Passwords.Add:input_type -> gophkeeper.PasswordCreateRequest
+	8,  // 4: gophkeeper.Passwords.Update:input_type -> gophkeeper.PasswordUpdateRequest
 	4,  // 5: gophkeeper.Passwords.Delete:input_type -> gophkeeper.PasswordRequest
-	8,  // 6: gophkeeper.Cards.Get:input_type -> gophkeeper.CardRequest
-	10, // 7: gophkeeper.Cards.Add:input_type -> gophkeeper.CardCreateRequest
-	11, // 8: gophkeeper.Cards.Update:input_type -> gophkeeper.CardUpdateRequest
-	8,  // 9: gophkeeper.Cards.Delete:input_type -> gophkeeper.CardRequest
-	12, // 10: gophkeeper.Binaries.Get:input_type -> gophkeeper.BinariesRequest
-	14, // 11: gophkeeper.Binaries.Add:input_type -> gophkeeper.BinariesCreateRequest
-	15, // 12: gophkeeper.Binaries.Update:input_type -> gophkeeper.BinariesUpdateRequest
-	12, // 13: gophkeeper.Binaries.Delete:input_type -> gophkeeper.BinariesRequest
+	9,  // 6: gophkeeper.Cards.Get:input_type -> gophkeeper.CardRequest
+	12, // 7: gophkeeper.Cards.Add:input_type -> gophkeeper.CardCreateRequest
+	13, // 8: gophkeeper.Cards.Update:input_type -> gophkeeper.CardUpdateRequest
+	9,  // 9: gophkeeper.Cards.Delete:input_type -> gophkeeper.CardRequest
+	14, // 10: gophkeeper.Binaries.Get:input_type -> gophkeeper.BinariesRequest
+	17, // 11: gophkeeper.Binaries.Add:input_type -> gophkeeper.BinariesCreateRequest
+	18, // 12: gophkeeper.Binaries.Update:input_type -> gophkeeper.BinariesUpdateRequest
+	14, // 13: gophkeeper.Binaries.Delete:input_type -> gophkeeper.BinariesRequest
 	1,  // 14: gophkeeper.Users.Register:output_type -> gophkeeper.RegisterResponse
 	3,  // 15: gophkeeper.Users.Login:output_type -> gophkeeper.LoginResponse
 	5,  // 16: gophkeeper.Passwords.Get:output_type -> gophkeeper.PasswordResponse
-	5,  // 17: gophkeeper.Passwords.Add:output_type -> gophkeeper.PasswordResponse
-	5,  // 18: gophkeeper.Passwords.Update:output_type -> gophkeeper.PasswordResponse
-	16, // 19: gophkeeper.Passwords.Delete:output_type -> google.protobuf.Empty
-	9,  // 20: gophkeeper.Cards.Get:output_type -> gophkeeper.CardResponse
-	9,  // 21: gophkeeper.Cards.Add:output_type -> gophkeeper.CardResponse
-	9,  // 22: gophkeeper.Cards.Update:output_type -> gophkeeper.CardResponse
-	16, // 23: gophkeeper.Cards.Delete:output_type -> google.protobuf.Empty
-	13, // 24: gophkeeper.Binaries.Get:output_type -> gophkeeper.BinariesResponse
-	13, // 25: gophkeeper.Binaries.Add:output_type -> gophkeeper.BinariesResponse
-	13, // 26: gophkeeper.Binaries.Update:output_type -> gophkeeper.BinariesResponse
-	16, // 27: gophkeeper.Binaries.Delete:output_type -> google.protobuf.Empty
+	6,  // 17: gophkeeper.Passwords.Add:output_type -> gophkeeper.PasswordShortResponse
+	6,  // 18: gophkeeper.Passwords.Update:output_type -> gophkeeper.PasswordShortResponse
+	19, // 19: gophkeeper.Passwords.Delete:output_type -> google.protobuf.Empty
+	10, // 20: gophkeeper.Cards.Get:output_type -> gophkeeper.CardResponse
+	11, // 21: gophkeeper.Cards.Add:output_type -> gophkeeper.CardShortResponse
+	11, // 22: gophkeeper.Cards.Update:output_type -> gophkeeper.CardShortResponse
+	19, // 23: gophkeeper.Cards.Delete:output_type -> google.protobuf.Empty
+	15, // 24: gophkeeper.Binaries.Get:output_type -> gophkeeper.BinariesResponse
+	16, // 25: gophkeeper.Binaries.Add:output_type -> gophkeeper.BinariesShortResponse
+	16, // 26: gophkeeper.Binaries.Update:output_type -> gophkeeper.BinariesShortResponse
+	19, // 27: gophkeeper.Binaries.Delete:output_type -> google.protobuf.Empty
 	14, // [14:28] is the sub-list for method output_type
 	0,  // [0:14] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name
@@ -1102,7 +1243,7 @@ func file_proto_gophkeeper_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_gophkeeper_proto_rawDesc), len(file_proto_gophkeeper_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   4,
 		},
