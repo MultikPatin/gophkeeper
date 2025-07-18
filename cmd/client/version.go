@@ -1,4 +1,4 @@
-package client
+package main
 
 // Глобальные переменные версии сборки
 var (

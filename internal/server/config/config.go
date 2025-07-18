@@ -14,10 +14,10 @@ type DatabaseType string
 
 // Predefined constants for default values across different configurations.
 const (
-	DefaultJWTExpiration = time.Hour * 3                                            // Default JWT token expiration set to 3 hours.
-	DefaultDatabaseType  = "postgres"                                               // Default database type is PostgreSQL.
-	DefaultPostgresDNS   = "postgres://postgres:postgres@localhost:5432/gophkeeper" // Default PostgreSQL Data Source Name (DSN).
-	DefaultGRPCPort      = "5050"                                                   // Default gRPC server listening port.
+	DefaultCryptoKey     = "3a7d4e1f9c02b58e7d9a2f3e8b01c9d7"                         // Default crypto key
+	DefaultJWTExpiration = time.Hour * 3                                              // Default JWT token expiration set to 3 hours.
+	DefaultPostgresDNS   = "postgresql://postgres:postgres@localhost:5432/gophkeeper" // Default PostgreSQL Data Source Name (DSN).
+	DefaultGRPCPort      = "5050"                                                     // Default gRPC server listening port.
 
 	PostgresSQL DatabaseType = "postgres" // Supported database type constant.
 )
@@ -50,25 +50,31 @@ func Parse(logger *zap.SugaredLogger) *Config {
 	if err != nil {
 		logger.Infow("Error while parsing environment variables", "error", err.Error())
 	}
-	fmt.Printf("envCfg: %+v\n", envCfg)
 
 	dbType, err := parseDatabaseType(envCfg.DatabaseType)
 	if err != nil {
 		logger.Infow("Invalid database type", "error", err.Error())
-		logger.Infow("Using default database:", "type", DefaultDatabaseType)
+		logger.Infow("Using default database:", "type", string(PostgresSQL))
 		cfg.DatabaseType = string(PostgresSQL)
+	} else {
+		cfg.DatabaseType = string(dbType)
 	}
-	cfg.DatabaseType = string(dbType)
 
-	cfg.DatabaseDSN, err = parseDSN(envCfg.DatabaseDSN)
-	if err != nil {
-		logger.Infow("Error while parsing database DSN", "error", err.Error())
+	if envCfg.DatabaseDSN == "" {
+		logger.Infow("Database DSN is empty")
 		logger.Infow("Using default database:", "DSN", DefaultPostgresDNS)
-		switch cfg.DatabaseType {
-		case string(PostgresSQL):
-			cfg.DatabaseDSN, _ = parseDSN(DefaultPostgresDNS)
-		default:
-			cfg.DatabaseDSN, _ = parseDSN(DefaultPostgresDNS)
+		cfg.DatabaseDSN, _ = parseDSN(DefaultPostgresDNS)
+	} else {
+		cfg.DatabaseDSN, err = parseDSN(envCfg.DatabaseDSN)
+		if err != nil {
+			logger.Infow("Error while parsing database DSN", "error", err.Error())
+			logger.Infow("Using default database:", "DSN", DefaultPostgresDNS)
+			switch cfg.DatabaseType {
+			case string(PostgresSQL):
+				cfg.DatabaseDSN, _ = parseDSN(DefaultPostgresDNS)
+			default:
+				cfg.DatabaseDSN, _ = parseDSN(DefaultPostgresDNS)
+			}
 		}
 	}
 
@@ -82,8 +88,8 @@ func Parse(logger *zap.SugaredLogger) *Config {
 
 	if envCfg.CryptoSecret == "" {
 		logger.Infow("Crypto secret is empty")
-		logger.Infow("Using default crypto secret:", "secret", "secret")
-		cfg.CryptoSecret = "secret"
+		logger.Infow("Using default crypto secret:", "secret", DefaultCryptoKey)
+		cfg.CryptoSecret = DefaultCryptoKey
 	} else {
 		cfg.CryptoSecret = envCfg.CryptoSecret
 	}

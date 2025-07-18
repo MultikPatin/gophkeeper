@@ -33,13 +33,13 @@ func (s *UsersService) Register(ctx context.Context, cond models.User) (int64, e
 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second) // Set timeout for the operation.
 	defer cancel()
 
-	hash, err := s.c.Hash(cond.Password) // Hash the password using the pass crypto service.
+	hash, err := s.c.Hash(cond.Password)
 	if err != nil {
 		return -1, err
 	}
-	cond.Password = hash // Replace plain password with hashed version.
+	cond.Password = hash
 
-	userID, err := s.r.Register(ctx, cond) // Delegate registration task to the repository.
+	userID, err := s.r.Register(ctx, cond)
 	if err != nil {
 		return -1, err
 	}
@@ -51,7 +51,7 @@ func (s *UsersService) Login(ctx context.Context, cond models.User) (int64, erro
 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second) // Set timeout for the operation.
 	defer cancel()
 
-	result, err := s.r.Login(ctx, cond.Login) // Fetch user record by login.
+	result, err := s.r.Login(ctx, cond.Login)
 	if err != nil {
 		return -1, err
 	}
