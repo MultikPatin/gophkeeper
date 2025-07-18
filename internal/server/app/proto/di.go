@@ -63,9 +63,9 @@ func NewApp(c *config.Config, l *zap.SugaredLogger) (*App, error) {
 func (a *App) StartServer() error {
 	defer a.wg.Done()
 
-	a.log.Infow("Starting gRPC server", "addr", a.conf.GRPCPort)
+	a.log.Infow("Starting gRPC server", "addr", a.conf.GRPCAddr)
 
-	listen, err := net.Listen("tcp", a.conf.GRPCPort)
+	listen, err := net.Listen("tcp", a.conf.GRPCAddr)
 	if err != nil {
 		return err
 	}
@@ -85,9 +85,6 @@ func (a *App) StartServer() error {
 		_, cancelShutdown := context.WithTimeout(context.Background(), ShutdownTime)
 		defer cancelShutdown()
 		a.srv.GracefulStop()
-		if err := listen.Close(); err != nil {
-			a.log.Fatalw(err.Error(), "event", "TCP listen shutdown")
-		}
 	}
 	return nil
 }

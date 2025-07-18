@@ -17,7 +17,7 @@ const (
 	DefaultCryptoKey     = "3a7d4e1f9c02b58e7d9a2f3e8b01c9d7"                         // Default crypto key
 	DefaultJWTExpiration = time.Hour * 3                                              // Default JWT token expiration set to 3 hours.
 	DefaultPostgresDNS   = "postgresql://postgres:postgres@localhost:5432/gophkeeper" // Default PostgreSQL Data Source Name (DSN).
-	DefaultGRPCPort      = "5050"                                                     // Default gRPC server listening port.
+	DefaultGRPCAddr      = "127.0.0.1:5050"                                           // Default gRPC server listening.
 
 	PostgresSQL DatabaseType = "postgres" // Supported database type constant.
 )
@@ -29,17 +29,17 @@ type Config struct {
 	JWTSecret     string        // Secret key used for signing JWT tokens.
 	JWTExpiration time.Duration // Expiration duration for issued JWT tokens.
 	CryptoSecret  string        // Key used for encryption purposes.
-	GRPCPort      string        // Port where the gRPC server listens.
+	GRPCAddr      string        // Port where the gRPC server.
 }
 
 // envConfig captures configuration properties extracted directly from environment variables.
 type envConfig struct {
-	DatabaseDSN   string `env:"DATABASE_DSN"`   // Environment variable holding the DSN for the database.
-	DatabaseType  string `env:"DATABASE_TYPE"`  // Environment variable specifying the database type.
-	JWTSecret     string `env:"JWT_SECRET"`     // Environment variable storing the JWT secret key.
-	JWTExpiration string `env:"JWT_EXPIRATION"` // Environment variable controlling JWT token lifetime.
-	CryptoSecret  string `env:"CRYPTO_SECRET"`  // Environment variable providing the cryptography secret.
-	GRPCPort      string `env:"GRPC_PORT"`      // Environment variable defining the gRPC server port.
+	DatabaseDSN   string `env:"DATABASE_DSN"`        // Environment variable holding the DSN for the database.
+	DatabaseType  string `env:"DATABASE_TYPE"`       // Environment variable specifying the database type.
+	JWTSecret     string `env:"JWT_SECRET"`          // Environment variable storing the JWT secret key.
+	JWTExpiration string `env:"JWT_EXPIRATION"`      // Environment variable controlling JWT token lifetime.
+	CryptoSecret  string `env:"CRYPTO_SECRET"`       // Environment variable providing the cryptography secret.
+	GRPCAddr      string `env:"GRPC_SERVER_ADDRESS"` // Environment variable defining the gRPC server.
 }
 
 // Parse consolidates configuration from multiple sources like environment variables and command-line flags into a unified Config object.
@@ -78,12 +78,12 @@ func Parse(logger *zap.SugaredLogger) *Config {
 		}
 	}
 
-	if err := ValidatePort(envCfg.GRPCPort); err != nil {
-		logger.Infow("Invalid GRPC port", "error", err.Error())
-		logger.Infow("Using default GRPC:", "port", DefaultGRPCPort)
-		cfg.GRPCPort = DefaultGRPCPort
+	if envCfg.GRPCAddr == "" {
+		logger.Infow("Invalid GRPC addr", "error", err.Error())
+		logger.Infow("Using default GRPC:", "addr", DefaultGRPCAddr)
+		cfg.GRPCAddr = DefaultGRPCAddr
 	} else {
-		cfg.GRPCPort = envCfg.GRPCPort
+		cfg.GRPCAddr = envCfg.GRPCAddr
 	}
 
 	if envCfg.CryptoSecret == "" {

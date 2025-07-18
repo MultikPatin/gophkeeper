@@ -12,25 +12,24 @@ import (
 func LoggerInterceptor(logger *zap.SugaredLogger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
 		start := time.Now()
-
-		logger.Info("request",
-			"method", info.FullMethod)
-
 		md, _ := metadata.FromIncomingContext(ctx)
 
-		logger.Debug("incoming",
-			"request", req,
-			"metadata", md)
+		logger.Info("request  | ",
+			"method: ", info.FullMethod,
+			" metadata: ", md)
+
+		logger.Debug("incoming | ",
+			"request: ", req)
 
 		resp, err = handler(ctx, req)
 
-		logger.Info("response",
-			"duration", time.Since(start),
-			"ok", err == nil)
+		logger.Info("response | ",
+			"duration: ", time.Since(start),
+			" ok: ", err == nil)
 
-		logger.Debug("outgoing",
-			"response", resp,
-			"error", err)
+		logger.Debug("outgoing | ",
+			"response: ", resp,
+			" error: ", err)
 
 		return
 	}

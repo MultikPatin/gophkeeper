@@ -20,8 +20,8 @@ var (
 func AuthInterceptor(j interfaces.JWTService) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		skipMethods := map[string]bool{
-			"/proto.Users/Login":    true, // Allows login requests without authentication.
-			"/proto.Users/Register": true, // Allows registration requests without authentication.
+			"/gophkeeper.Users/Login":    true, // Allows login requests without authentication.
+			"/gophkeeper.Users/Register": true, // Allows registration requests without authentication.
 		}
 
 		if skipMethods[info.FullMethod] {

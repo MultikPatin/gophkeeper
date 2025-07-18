@@ -9,6 +9,6 @@
 //	    JWTSecret     string        // Secret key used for signing JWT tokens.
 //	    JWTExpiration time.Duration // Token expiration time in hours.
 //	    CryptoSecret  string        // Secret used for encryption.
-//	    GRPCPort      string        // Port for the gRPC server.
+//	    GRPCAddr      string        // Port for the gRPC server.
 //	}
 package config
