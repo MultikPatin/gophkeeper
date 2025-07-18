@@ -8,12 +8,15 @@ import (
 	pb "main/proto"
 )
 
+// CardsHandler implements the gRPC service definition for managing credit card data.
+// It delegates requests to the underlying CardsService for actual business logic execution.
 type CardsHandler struct {
-	pb.UnimplementedCardsServer
-	s interfaces.CardsService
-	j interfaces.JWTService
+	pb.UnimplementedCardsServer                         // Base implementation for protobuf-defined gRPC server.
+	s                           interfaces.CardsService // Service for handling credit card operations.
+	j                           interfaces.JWTService   // JWT service for authentication purposes.
 }
 
+// NewCardsHandler creates a new instance of CardsHandler with injected dependencies.
 func NewCardsHandler(s interfaces.CardsService, j interfaces.JWTService) *CardsHandler {
 	return &CardsHandler{
 		s: s,
@@ -21,6 +24,8 @@ func NewCardsHandler(s interfaces.CardsService, j interfaces.JWTService) *CardsH
 	}
 }
 
+// Get retrieves a credit card by title and user ID.
+// It extracts the user ID from the context and passes control to the CardsService.
 func (h *CardsHandler) Get(ctx context.Context, in *pb.CardRequest) (*pb.CardResponse, error) {
 	userID := ctx.Value("userID").(int64)
 
@@ -39,8 +44,11 @@ func (h *CardsHandler) Get(ctx context.Context, in *pb.CardRequest) (*pb.CardRes
 	}, nil
 }
 
+// Add creates a new credit card entry.
+// It populates a Card model and invokes the CardsService to perform the insertion.
 func (h *CardsHandler) Add(ctx context.Context, in *pb.CardCreateRequest) (*pb.CardShortResponse, error) {
 	userID := ctx.Value("userID").(int64)
+
 	cond := models.Card{
 		Title:      in.Title,
 		UserID:     userID,
@@ -60,6 +68,8 @@ func (h *CardsHandler) Add(ctx context.Context, in *pb.CardCreateRequest) (*pb.C
 	}, nil
 }
 
+// Update modifies an existing credit card entry.
+// It prepares a Card model and triggers the CardsService to execute the update.
 func (h *CardsHandler) Update(ctx context.Context, in *pb.CardUpdateRequest) (*pb.CardShortResponse, error) {
 	userID := ctx.Value("userID").(int64)
 
@@ -81,6 +91,8 @@ func (h *CardsHandler) Update(ctx context.Context, in *pb.CardUpdateRequest) (*p
 	}, nil
 }
 
+// Delete removes a credit card entry by title and user ID.
+// It extracts the user ID from the context and forwards the removal request to the CardsService.
 func (h *CardsHandler) Delete(ctx context.Context, in *pb.CardRequest) (*emptypb.Empty, error) {
 	userID := ctx.Value("userID").(int64)
 

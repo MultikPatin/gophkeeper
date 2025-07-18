@@ -7,7 +7,6 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"log"
-	"main/internal/server"
 	"main/internal/server/adapters/db/psql"
 	"main/internal/server/adapters/db/psql/repositories"
 	"main/internal/server/config"
@@ -16,6 +15,12 @@ import (
 	"main/internal/server/services"
 	"net"
 	"sync"
+	"time"
+)
+
+const (
+	// ShutdownTime specifies the grace period for shutting down the server.
+	ShutdownTime = 5 * time.Second
 )
 
 // App encapsulates the core application state and dependencies.
@@ -77,7 +82,7 @@ func (a *App) StartServer() error {
 	case err := <-errCh:
 		log.Println("Error in gRPC server:", err)
 	case <-a.ctx.Done():
-		_, cancelShutdown := context.WithTimeout(context.Background(), server.ShutdownTime)
+		_, cancelShutdown := context.WithTimeout(context.Background(), ShutdownTime)
 		defer cancelShutdown()
 		a.srv.GracefulStop()
 		if err := listen.Close(); err != nil {
@@ -117,10 +122,7 @@ func NewServices(c *config.Config, l *zap.SugaredLogger) (*Services, error) {
 	if err != nil {
 		return nil, err
 	}
-	passCrypto, err := crypto.NewPassCrypto()
-	if err != nil {
-		return nil, err
-	}
+	passCrypto := crypto.NewPassCrypto()
 
 	return &Services{
 		binaries:  services.NewBinariesService(r.binaries, aesCrypto),

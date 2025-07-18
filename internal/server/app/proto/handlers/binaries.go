@@ -8,12 +8,15 @@ import (
 	pb "main/proto"
 )
 
+// BinariesHandler implements the gRPC service definition for managing binary data.
+// It delegates requests to the underlying BinariesService for actual business logic execution.
 type BinariesHandler struct {
-	pb.UnimplementedBinariesServer
-	s interfaces.BinariesService
-	j interfaces.JWTService
+	pb.UnimplementedBinariesServer                            // Base implementation for protobuf-defined gRPC server.
+	s                              interfaces.BinariesService // Service for handling binary data operations.
+	j                              interfaces.JWTService      // JWT service for authentication purposes.
 }
 
+// NewBinariesHandler creates a new instance of BinariesHandler with injected dependencies.
 func NewBinariesHandler(s interfaces.BinariesService, j interfaces.JWTService) *BinariesHandler {
 	return &BinariesHandler{
 		s: s,
@@ -21,6 +24,8 @@ func NewBinariesHandler(s interfaces.BinariesService, j interfaces.JWTService) *
 	}
 }
 
+// Get retrieves a binary data item by title and user ID.
+// It extracts the user ID from the context and passes control to the BinariesService.
 func (h *BinariesHandler) Get(ctx context.Context, in *pb.BinariesRequest) (*pb.BinariesResponse, error) {
 	userID := ctx.Value("userID").(int64)
 
@@ -35,6 +40,8 @@ func (h *BinariesHandler) Get(ctx context.Context, in *pb.BinariesRequest) (*pb.
 	}, nil
 }
 
+// Add creates a new binary data entry.
+// It populates a BinaryData model and invokes the BinariesService to perform the insertion.
 func (h *BinariesHandler) Add(ctx context.Context, in *pb.BinariesCreateRequest) (*pb.BinariesShortResponse, error) {
 	userID := ctx.Value("userID").(int64)
 
@@ -54,6 +61,8 @@ func (h *BinariesHandler) Add(ctx context.Context, in *pb.BinariesCreateRequest)
 	}, nil
 }
 
+// Update modifies an existing binary data entry.
+// It prepares a BinaryData model and triggers the BinariesService to execute the update.
 func (h *BinariesHandler) Update(ctx context.Context, in *pb.BinariesUpdateRequest) (*pb.BinariesShortResponse, error) {
 	userID := ctx.Value("userID").(int64)
 
@@ -72,6 +81,8 @@ func (h *BinariesHandler) Update(ctx context.Context, in *pb.BinariesUpdateReque
 	}, nil
 }
 
+// Delete removes a binary data entry by title and user ID.
+// It extracts the user ID from the context and forwards the removal request to the BinariesService.
 func (h *BinariesHandler) Delete(ctx context.Context, in *pb.BinariesRequest) (*emptypb.Empty, error) {
 	userID := ctx.Value("userID").(int64)
 

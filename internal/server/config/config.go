@@ -9,38 +9,40 @@ import (
 	"time"
 )
 
+// DatabaseType specifies the supported database types as strings.
 type DatabaseType string
 
+// Predefined constants for default values across different configurations.
 const (
-	DefaultJWTExpiration = time.Hour * 3
-	DefaultDatabaseType  = "postgres"
-	DefaultPostgresDNS   = "postgres://postgres:postgres@localhost:5432/gophkeeper"
-	DefaultGRPCPort      = "5050"
+	DefaultJWTExpiration = time.Hour * 3                                            // Default JWT token expiration set to 3 hours.
+	DefaultDatabaseType  = "postgres"                                               // Default database type is PostgreSQL.
+	DefaultPostgresDNS   = "postgres://postgres:postgres@localhost:5432/gophkeeper" // Default PostgreSQL Data Source Name (DSN).
+	DefaultGRPCPort      = "5050"                                                   // Default gRPC server listening port.
 
-	PostgresSQL DatabaseType = "postgres"
+	PostgresSQL DatabaseType = "postgres" // Supported database type constant.
 )
 
-// Config stores all the necessary configurations from both environment variables and command line inputs.
+// Config encapsulates application-wide configuration parameters derived from environment variables and command-line arguments.
 type Config struct {
-	DatabaseDSN   *url.URL      // Database connection details (Data Source Name).
-	DatabaseType  string        // Database type (e.g. "postgres", "mysql", etc.).
-	JWTSecret     string        // Secret key for JWT authentication.
-	JWTExpiration time.Duration // JWT expiration time.
-	CryptoSecret  string        // Secret key for cryptographic operations.
-	GRPCPort      string        // gRPC server port.
+	DatabaseDSN   *url.URL      // Parsed Data Source Name (DSN) for connecting to the database.
+	DatabaseType  string        // Type of the database being used ("postgres", etc.).
+	JWTSecret     string        // Secret key used for signing JWT tokens.
+	JWTExpiration time.Duration // Expiration duration for issued JWT tokens.
+	CryptoSecret  string        // Key used for encryption purposes.
+	GRPCPort      string        // Port where the gRPC server listens.
 }
 
-// envConfig holds configuration settings retrieved from environment variables.
+// envConfig captures configuration properties extracted directly from environment variables.
 type envConfig struct {
-	DatabaseDSN   string `env:"DATABASE_DSN"`   // PostgresSQL Data Source Name received from an environment variable.
-	DatabaseType  string `env:"DATABASE_TYPE"`  // Database type (e.g. "postgres", "mysql", etc.).
-	JWTSecret     string `env:"JWT_SECRET"`     // Secret key for JWT authentication.
-	JWTExpiration string `env:"JWT_EXPIRATION"` // JWT expiration time in hours (1..24).
-	CryptoSecret  string `env:"CRYPTO_SECRET"`  // Secret key for cryptographic operations.
-	GRPCPort      string `env:"GRPC_PORT"`      // gRPC server port.
+	DatabaseDSN   string `env:"DATABASE_DSN"`   // Environment variable holding the DSN for the database.
+	DatabaseType  string `env:"DATABASE_TYPE"`  // Environment variable specifying the database type.
+	JWTSecret     string `env:"JWT_SECRET"`     // Environment variable storing the JWT secret key.
+	JWTExpiration string `env:"JWT_EXPIRATION"` // Environment variable controlling JWT token lifetime.
+	CryptoSecret  string `env:"CRYPTO_SECRET"`  // Environment variable providing the cryptography secret.
+	GRPCPort      string `env:"GRPC_PORT"`      // Environment variable defining the gRPC server port.
 }
 
-// Parse merges environment variables and command-line options into a single configuration object.
+// Parse consolidates configuration from multiple sources like environment variables and command-line flags into a unified Config object.
 func Parse(logger *zap.SugaredLogger) *Config {
 	cfg := &Config{}
 
@@ -98,7 +100,7 @@ func Parse(logger *zap.SugaredLogger) *Config {
 	return cfg
 }
 
-// parseEnv extracts configuration from environment variables.
+// parseEnv extracts configuration settings from environment variables.
 func parseEnv() (*envConfig, error) {
 	cfg := &envConfig{}
 	err := env.Parse(cfg)
@@ -108,7 +110,7 @@ func parseEnv() (*envConfig, error) {
 	return cfg, nil
 }
 
-// parseDSN converts a raw Data Source Name (DSN) string into a structured URL object.
+// parseDSN parses a raw Data Source Name (DSN) string into a structured URL representation.
 func parseDSN(dsn string) (*url.URL, error) {
 	u, err := url.Parse(dsn)
 	if err != nil {
@@ -117,6 +119,7 @@ func parseDSN(dsn string) (*url.URL, error) {
 	return u, nil
 }
 
+// parseDatabaseType translates a string representation of the database type into its corresponding DatabaseType value.
 func parseDatabaseType(s string) (DatabaseType, error) {
 	switch s {
 	case string(PostgresSQL):
@@ -126,6 +129,7 @@ func parseDatabaseType(s string) (DatabaseType, error) {
 	}
 }
 
+// ValidatePort checks whether the supplied port is valid according to basic constraints.
 func ValidatePort(port string) error {
 	if port == "" {
 		return fmt.Errorf("GRPC port is empty")
@@ -150,6 +154,7 @@ func ValidatePort(port string) error {
 	return nil
 }
 
+// IsNumberInRange ensures that a numeric string falls within a defined minimum and maximum boundary.
 func IsNumberInRange(s string, min int, max int) (int, error) {
 	num, err := strconv.Atoi(s)
 	if err != nil || num < min || num > max {

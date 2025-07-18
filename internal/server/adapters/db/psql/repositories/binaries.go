@@ -7,16 +7,19 @@ import (
 	"main/internal/server/models"
 )
 
+// BinariesRepository implements the binaries data access layer for PostgreSQL
 type BinariesRepository struct {
 	db *psql.DB
 }
 
+// NewBinariesRepository creates a new BinariesRepository instance
 func NewBinariesRepository(db *psql.DB) *BinariesRepository {
 	return &BinariesRepository{
 		db: db,
 	}
 }
 
+// Get retrieves binary data by title and user ID from the database
 func (r *BinariesRepository) Get(ctx context.Context, title string, UserID int64) (*models.BinaryData, error) {
 	var result models.BinaryData
 
@@ -27,6 +30,7 @@ func (r *BinariesRepository) Get(ctx context.Context, title string, UserID int64
 	return &result, nil
 }
 
+// Add stores new binary data in the database
 func (r *BinariesRepository) Add(ctx context.Context, cond models.BinaryData) (string, error) {
 	var title string
 
@@ -37,6 +41,7 @@ func (r *BinariesRepository) Add(ctx context.Context, cond models.BinaryData) (s
 	return title, nil
 }
 
+// Update modifies existing binary data in the database
 func (r *BinariesRepository) Update(ctx context.Context, cond models.BinaryData) (string, error) {
 	var title string
 
@@ -47,6 +52,7 @@ func (r *BinariesRepository) Update(ctx context.Context, cond models.BinaryData)
 	return title, nil
 }
 
+// Delete removes binary data from the database by title and user ID
 func (r *BinariesRepository) Delete(ctx context.Context, title string, UserID int64) error {
 	_, err := r.db.Conn.ExecContext(ctx, stmt.binary.delete, title, UserID)
 	if err != nil {

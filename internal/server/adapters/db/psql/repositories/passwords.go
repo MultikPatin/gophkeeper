@@ -7,16 +7,19 @@ import (
 	"main/internal/server/models"
 )
 
+// PasswordsRepository implements the passwords data access layer for PostgreSQL
 type PasswordsRepository struct {
-	db *psql.DB
+	db *psql.DB // Database connection
 }
 
+// NewPasswordsRepository creates a new PasswordsRepository instance
 func NewPasswordsRepository(db *psql.DB) *PasswordsRepository {
 	return &PasswordsRepository{
 		db: db,
 	}
 }
 
+// Get retrieves password information by title and user ID from the database
 func (r *PasswordsRepository) Get(ctx context.Context, title string, UserID int64) (*models.Password, error) {
 	var result models.Password
 
@@ -27,6 +30,7 @@ func (r *PasswordsRepository) Get(ctx context.Context, title string, UserID int6
 	return &result, nil
 }
 
+// Add stores new password information in the database
 func (r *PasswordsRepository) Add(ctx context.Context, cond models.Password) (string, error) {
 	var title string
 
@@ -37,6 +41,7 @@ func (r *PasswordsRepository) Add(ctx context.Context, cond models.Password) (st
 	return title, nil
 }
 
+// Update modifies existing password information in the database
 func (r *PasswordsRepository) Update(ctx context.Context, cond models.Password) (string, error) {
 	var title string
 
@@ -47,6 +52,7 @@ func (r *PasswordsRepository) Update(ctx context.Context, cond models.Password) 
 	return title, nil
 }
 
+// Delete removes password information from the database by title and user ID
 func (r *PasswordsRepository) Delete(ctx context.Context, title string, UserID int64) error {
 	_, err := r.db.Conn.ExecContext(ctx, stmt.password.delete, title, UserID)
 	if err != nil {

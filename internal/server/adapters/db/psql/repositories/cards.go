@@ -7,16 +7,19 @@ import (
 	"main/internal/server/models"
 )
 
+// CardsRepository implements the cards data access layer for PostgreSQL
 type CardsRepository struct {
 	db *psql.DB
 }
 
+// NewCardsRepository creates a new CardsRepository instance
 func NewCardsRepository(db *psql.DB) *CardsRepository {
 	return &CardsRepository{
 		db: db,
 	}
 }
 
+// Get retrieves credit card information by title and user ID from the database
 func (r *CardsRepository) Get(ctx context.Context, title string, UserID int64) (*models.Card, error) {
 	var result models.Card
 
@@ -27,6 +30,7 @@ func (r *CardsRepository) Get(ctx context.Context, title string, UserID int64) (
 	return &result, nil
 }
 
+// Add stores new credit card information in the database
 func (r *CardsRepository) Add(ctx context.Context, cond models.Card) (string, error) {
 	var title string
 
@@ -37,6 +41,7 @@ func (r *CardsRepository) Add(ctx context.Context, cond models.Card) (string, er
 	return title, nil
 }
 
+// Update modifies existing credit card information in the database
 func (r *CardsRepository) Update(ctx context.Context, cond models.Card) (string, error) {
 	var title string
 
@@ -47,6 +52,7 @@ func (r *CardsRepository) Update(ctx context.Context, cond models.Card) (string,
 	return title, nil
 }
 
+// Delete removes credit card information from the database by title and user ID
 func (r *CardsRepository) Delete(ctx context.Context, title string, UserID int64) error {
 	_, err := r.db.Conn.ExecContext(ctx, stmt.card.delete, title, UserID)
 	if err != nil {

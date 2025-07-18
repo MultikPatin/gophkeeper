@@ -8,16 +8,19 @@ import (
 	"time"
 )
 
+// Error definitions for common scenarios in user service operations.
 var (
-	ErrLoginAlreadyExists        = errors.New("login already exists")
-	ErrAuthCredentialsIsNotValid = errors.New("login or password is not valid")
+	ErrLoginAlreadyExists        = errors.New("login already exists")           // Thrown when attempting to register a duplicate login.
+	ErrAuthCredentialsIsNotValid = errors.New("login or password is not valid") // Raised when invalid credentials are presented during login.
 )
 
+// UsersService encapsulates user-related business logic, handling registration and authentication processes.
 type UsersService struct {
-	r interfaces.UsersRepository
-	c interfaces.PassCryptoService
+	r interfaces.UsersRepository   // Dependency for interacting with the user repository.
+	c interfaces.PassCryptoService // Dependency for password hashing and verification.
 }
 
+// NewUsersService creates a new instance of UsersService with the necessary dependencies.
 func NewUsersService(r interfaces.UsersRepository, c interfaces.PassCryptoService) *UsersService {
 	return &UsersService{
 		r: r,
@@ -25,35 +28,38 @@ func NewUsersService(r interfaces.UsersRepository, c interfaces.PassCryptoServic
 	}
 }
 
-func (s *UsersService) Register(ctx context.Context, cond models.User) error {
-	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+// Register performs user registration, hashing the provided password and persisting the user data.
+func (s *UsersService) Register(ctx context.Context, cond models.User) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second) // Set timeout for the operation.
 	defer cancel()
 
-	hash, err := s.c.Hash(cond.Password)
+	hash, err := s.c.Hash(cond.Password) // Hash the password using the pass crypto service.
 	if err != nil {
-		return err
+		return -1, err
 	}
-	cond.Password = hash
+	cond.Password = hash // Replace plain password with hashed version.
 
-	err = s.r.Register(ctx, cond)
+	userID, err := s.r.Register(ctx, cond) // Delegate registration task to the repository.
 	if err != nil {
-		return err
+		return -1, err
 	}
-	return nil
+	return userID, nil
 }
 
-func (s *UsersService) Login(ctx context.Context, cond models.User) error {
-	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+// Login authenticates a user by validating their credentials against persisted data.
+func (s *UsersService) Login(ctx context.Context, cond models.User) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second) // Set timeout for the operation.
 	defer cancel()
 
-	result, err := s.r.Login(ctx, cond.Login)
+	result, err := s.r.Login(ctx, cond.Login) // Fetch user record by login.
 	if err != nil {
-		return err
+		return -1, err
 	}
 
-	if !s.c.IsEqual(cond.Password, result.Password) {
-		return ErrAuthCredentialsIsNotValid
+	err = s.c.IsEqual(cond.Password, result.Password)
+	if err != nil {
+		return -1, ErrAuthCredentialsIsNotValid
 	}
 
-	return nil
+	return result.ID, nil
 }

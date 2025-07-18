@@ -6,11 +6,14 @@ import (
 	"main/internal/server/models"
 )
 
+// BinariesService manages business logic for binary data storage and retrieval.
+// It integrates with a repository for persistence and a crypto service for encryption/decryption.
 type BinariesService struct {
-	r interfaces.BinariesRepository
-	c interfaces.CryptoService
+	r interfaces.BinariesRepository // Repository for accessing binary data storage.
+	c interfaces.CryptoService      // Service responsible for encryption and decryption.
 }
 
+// NewBinariesService instantiates a new BinariesService instance with dependencies injected.
 func NewBinariesService(r interfaces.BinariesRepository, c interfaces.CryptoService) *BinariesService {
 	return &BinariesService{
 		r: r,
@@ -18,6 +21,7 @@ func NewBinariesService(r interfaces.BinariesRepository, c interfaces.CryptoServ
 	}
 }
 
+// Get fetches a binary data item by title and user ID, then decrypts the content.
 func (s *BinariesService) Get(ctx context.Context, title string, UserID int64) (*models.BinaryData, error) {
 	result, err := s.r.Get(ctx, title, UserID)
 	if err != nil {
@@ -31,6 +35,7 @@ func (s *BinariesService) Get(ctx context.Context, title string, UserID int64) (
 	return result, nil
 }
 
+// Add inserts a new binary data item into storage after encrypting its contents.
 func (s *BinariesService) Add(ctx context.Context, cond models.BinaryData) (string, error) {
 	var err error
 
@@ -47,6 +52,7 @@ func (s *BinariesService) Add(ctx context.Context, cond models.BinaryData) (stri
 	return result, nil
 }
 
+// Update modifies an existing binary data item, first encrypting the updated content.
 func (s *BinariesService) Update(ctx context.Context, cond models.BinaryData) (string, error) {
 	var err error
 
@@ -63,6 +69,7 @@ func (s *BinariesService) Update(ctx context.Context, cond models.BinaryData) (s
 	return result, nil
 }
 
+// Delete removes a binary data item identified by title and user ID.
 func (s *BinariesService) Delete(ctx context.Context, title string, UserID int64) error {
 	err := s.r.Delete(ctx, title, UserID)
 	if err != nil {
@@ -71,6 +78,7 @@ func (s *BinariesService) Delete(ctx context.Context, title string, UserID int64
 	return nil
 }
 
+// decrypt takes a binary data item and decrypts its content using the configured crypto service.
 func (s *BinariesService) decrypt(result *models.BinaryData) (*models.BinaryData, error) {
 	var err error
 
@@ -82,6 +90,7 @@ func (s *BinariesService) decrypt(result *models.BinaryData) (*models.BinaryData
 	return result, nil
 }
 
+// encrypt encrypts the binary data content prior to persisting it.
 func (s *BinariesService) encrypt(cond models.BinaryData) (models.BinaryData, error) {
 	var err error
 
