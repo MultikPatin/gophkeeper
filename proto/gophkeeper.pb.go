@@ -432,7 +432,7 @@ func (x *PasswordCreateRequest) GetPassword() string {
 
 type PasswordUpdateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
 	Login         string                 `protobuf:"bytes,2,opt,name=login,proto3" json:"login,omitempty"`
 	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -469,11 +469,11 @@ func (*PasswordUpdateRequest) Descriptor() ([]byte, []int) {
 	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *PasswordUpdateRequest) GetId() int64 {
+func (x *PasswordUpdateRequest) GetTitle() string {
 	if x != nil {
-		return x.Id
+		return x.Title
 	}
-	return 0
+	return ""
 }
 
 func (x *PasswordUpdateRequest) GetLogin() string {
@@ -740,7 +740,7 @@ func (x *CardCreateRequest) GetSecretCode() string {
 
 type CardUpdateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
 	Bank          string                 `protobuf:"bytes,3,opt,name=bank,proto3" json:"bank,omitempty"`
 	Number        string                 `protobuf:"bytes,4,opt,name=number,proto3" json:"number,omitempty"`
 	DataEnd       string                 `protobuf:"bytes,5,opt,name=dataEnd,proto3" json:"dataEnd,omitempty"`
@@ -779,11 +779,11 @@ func (*CardUpdateRequest) Descriptor() ([]byte, []int) {
 	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *CardUpdateRequest) GetId() int64 {
+func (x *CardUpdateRequest) GetTitle() string {
 	if x != nil {
-		return x.Id
+		return x.Title
 	}
-	return 0
+	return ""
 }
 
 func (x *CardUpdateRequest) GetBank() string {
@@ -1016,7 +1016,7 @@ func (x *BinariesCreateRequest) GetData() []byte {
 
 type BinariesUpdateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
 	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1052,11 +1052,11 @@ func (*BinariesUpdateRequest) Descriptor() ([]byte, []int) {
 	return file_proto_gophkeeper_proto_rawDescGZIP(), []int{18}
 }
 
-func (x *BinariesUpdateRequest) GetId() int64 {
+func (x *BinariesUpdateRequest) GetTitle() string {
 	if x != nil {
-		return x.Id
+		return x.Title
 	}
-	return 0
+	return ""
 }
 
 func (x *BinariesUpdateRequest) GetData() []byte {
@@ -1094,9 +1094,9 @@ const file_proto_gophkeeper_proto_rawDesc = "" +
 	"\x15PasswordCreateRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12\x14\n" +
 	"\x05login\x18\x02 \x01(\tR\x05login\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\"Y\n" +
-	"\x15PasswordUpdateRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\"_\n" +
+	"\x15PasswordUpdateRequest\x12\x14\n" +
+	"\x05title\x18\x01 \x01(\tR\x05title\x12\x14\n" +
 	"\x05login\x18\x02 \x01(\tR\x05login\x12\x1a\n" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword\"#\n" +
 	"\vCardRequest\x12\x14\n" +
@@ -1119,9 +1119,9 @@ const file_proto_gophkeeper_proto_rawDesc = "" +
 	"\adataEnd\x18\x05 \x01(\tR\adataEnd\x12\x1e\n" +
 	"\n" +
 	"secretCode\x18\x06 \x01(\tR\n" +
-	"secretCode\"\x89\x01\n" +
-	"\x11CardUpdateRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"secretCode\"\x8f\x01\n" +
+	"\x11CardUpdateRequest\x12\x14\n" +
+	"\x05title\x18\x01 \x01(\tR\x05title\x12\x12\n" +
 	"\x04bank\x18\x03 \x01(\tR\x04bank\x12\x16\n" +
 	"\x06number\x18\x04 \x01(\tR\x06number\x12\x18\n" +
 	"\adataEnd\x18\x05 \x01(\tR\adataEnd\x12\x1e\n" +
@@ -1138,9 +1138,9 @@ const file_proto_gophkeeper_proto_rawDesc = "" +
 	"\x05title\x18\x02 \x01(\tR\x05title\"A\n" +
 	"\x15BinariesCreateRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12\x12\n" +
-	"\x04data\x18\x02 \x01(\fR\x04data\";\n" +
-	"\x15BinariesUpdateRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\"A\n" +
+	"\x15BinariesUpdateRequest\x12\x14\n" +
+	"\x05title\x18\x01 \x01(\tR\x05title\x12\x12\n" +
 	"\x04data\x18\x02 \x01(\fR\x04data2\x8c\x01\n" +
 	"\x05Users\x12E\n" +
 	"\bRegister\x12\x1b.gophkeeper.RegisterRequest\x1a\x1c.gophkeeper.RegisterResponse\x12<\n" +

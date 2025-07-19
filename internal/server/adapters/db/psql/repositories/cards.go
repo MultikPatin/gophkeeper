@@ -2,9 +2,14 @@ package repositories
 
 import (
 	"context"
+	"database/sql"
+	"errors"
+	"github.com/jackc/pgerrcode"
+	"github.com/jackc/pgx/v5/pgconn"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"main/internal/server/adapters/db/psql"
 	"main/internal/server/models"
+	"main/internal/server/services"
 )
 
 // CardsRepository implements the cards data access layer for PostgreSQL
@@ -25,6 +30,9 @@ func (r *CardsRepository) Get(ctx context.Context, title string, UserID int64) (
 
 	err := r.db.Conn.QueryRowContext(ctx, stmt.card.get, title, UserID).Scan(&result.ID, &result.Title, &result.Bank, &result.Number, &result.DataEnd, &result.SecretCode)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, services.ErrCardNotFound
+		}
 		return nil, err
 	}
 	return &result, nil
@@ -35,6 +43,12 @@ func (r *CardsRepository) Add(ctx context.Context, cond models.Card) (string, er
 	var title string
 
 	err := r.db.Conn.QueryRowContext(ctx, stmt.card.add, cond.Title, cond.UserID, cond.Bank, cond.Number, cond.DataEnd, cond.SecretCode).Scan(&title)
+
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) && pgerrcode.IsIntegrityConstraintViolation(pgErr.Code) {
+		return "", services.ErrCardAlreadyExists
+	}
+
 	if err != nil {
 		return "", err
 	}

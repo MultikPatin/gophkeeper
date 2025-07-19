@@ -2,9 +2,14 @@ package repositories
 
 import (
 	"context"
+	"database/sql"
+	"errors"
+	"github.com/jackc/pgerrcode"
+	"github.com/jackc/pgx/v5/pgconn"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"main/internal/server/adapters/db/psql"
 	"main/internal/server/models"
+	"main/internal/server/services"
 )
 
 // BinariesRepository implements the binaries data access layer for PostgreSQL
@@ -25,6 +30,9 @@ func (r *BinariesRepository) Get(ctx context.Context, title string, UserID int64
 
 	err := r.db.Conn.QueryRowContext(ctx, stmt.binary.get, title, UserID).Scan(&result.ID, &result.Title, &result.Data)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, services.ErrBinaryNotFound
+		}
 		return nil, err
 	}
 	return &result, nil
@@ -35,6 +43,12 @@ func (r *BinariesRepository) Add(ctx context.Context, cond models.BinaryData) (s
 	var title string
 
 	err := r.db.Conn.QueryRowContext(ctx, stmt.binary.add, cond.Title, cond.UserID, cond.Data).Scan(&title)
+
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) && pgerrcode.IsIntegrityConstraintViolation(pgErr.Code) {
+		return "", services.ErrBinaryAlreadyExists
+	}
+
 	if err != nil {
 		return "", err
 	}

@@ -2,9 +2,14 @@ package repositories
 
 import (
 	"context"
+	"database/sql"
+	"errors"
+	"github.com/jackc/pgerrcode"
+	"github.com/jackc/pgx/v5/pgconn"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"main/internal/server/adapters/db/psql"
 	"main/internal/server/models"
+	"main/internal/server/services"
 )
 
 // PasswordsRepository implements the passwords data access layer for PostgreSQL
@@ -23,8 +28,11 @@ func NewPasswordsRepository(db *psql.DB) *PasswordsRepository {
 func (r *PasswordsRepository) Get(ctx context.Context, title string, UserID int64) (*models.Password, error) {
 	var result models.Password
 
-	err := r.db.Conn.QueryRowContext(ctx, stmt.password.get, title, UserID).Scan(&result.ID, &result.Title, &result.Login, &result.Password)
+	err := r.db.Conn.QueryRowContext(ctx, stmt.password.get, title, UserID).Scan(&result.ID, &result.Title, &result.UserID, &result.Login, &result.Password)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, services.ErrPasswordNotFound
+		}
 		return nil, err
 	}
 	return &result, nil
@@ -35,6 +43,12 @@ func (r *PasswordsRepository) Add(ctx context.Context, cond models.Password) (st
 	var title string
 
 	err := r.db.Conn.QueryRowContext(ctx, stmt.password.add, cond.Title, cond.UserID, cond.Login, cond.Password).Scan(&title)
+
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) && pgerrcode.IsIntegrityConstraintViolation(pgErr.Code) {
+		return "", services.ErrPasswordAlreadyExists
+	}
+
 	if err != nil {
 		return "", err
 	}

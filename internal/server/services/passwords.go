@@ -2,8 +2,15 @@ package services
 
 import (
 	"context"
+	"errors"
 	"main/internal/server/interfaces"
 	"main/internal/server/models"
+)
+
+// Error definitions for common scenarios in password service operations.
+var (
+	ErrPasswordAlreadyExists = errors.New("password already exists") // Thrown when attempting to add a duplicate password.
+	ErrPasswordNotFound      = errors.New("password not found")      // Raised when get a non-existent password.
 )
 
 // PasswordsService manages the lifecycle of password entities, incorporating encryption for sensitive fields.

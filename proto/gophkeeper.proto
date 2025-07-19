@@ -51,7 +51,7 @@ message PasswordCreateRequest {
 }
 
 message PasswordUpdateRequest {
-  int64  id = 1;
+  string title = 1;
   string login = 2;
   string password = 3;
 }
@@ -84,7 +84,7 @@ message CardCreateRequest {
 }
 
 message CardUpdateRequest {
-  int64  id = 1;
+  string title = 1;
   string bank = 3;
   string number = 4;
   string dataEnd = 5;
@@ -113,7 +113,7 @@ message BinariesCreateRequest {
 }
 
 message BinariesUpdateRequest {
-  int64  id = 1;
+  string title = 1;
   bytes data = 2;
 }
 

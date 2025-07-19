@@ -2,8 +2,15 @@ package services
 
 import (
 	"context"
+	"errors"
 	"main/internal/server/interfaces"
 	"main/internal/server/models"
+)
+
+// Error definitions for common scenarios in binary service operations.
+var (
+	ErrBinaryAlreadyExists = errors.New("binary already exists") // Thrown when attempting to add a duplicate binary.
+	ErrBinaryNotFound      = errors.New("binary not found")      // Raised when get a non-existent binary.
 )
 
 // BinariesService manages business logic for binary data storage and retrieval.

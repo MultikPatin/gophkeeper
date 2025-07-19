@@ -2,8 +2,15 @@ package services
 
 import (
 	"context"
+	"errors"
 	"main/internal/server/interfaces"
 	"main/internal/server/models"
+)
+
+// Error definitions for common scenarios in card service operations.
+var (
+	ErrCardAlreadyExists = errors.New("card already exists") // Thrown when attempting to add a duplicate card.
+	ErrCardNotFound      = errors.New("card not found")      // Raised when get a non-existent card.
 )
 
 // CardsService manages the lifecycle of credit card entities, integrating encryption for sensitive data.
