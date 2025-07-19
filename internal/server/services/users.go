@@ -10,8 +10,9 @@ import (
 
 // Error definitions for common scenarios in user service operations.
 var (
-	ErrLoginAlreadyExists        = errors.New("login already exists")           // Thrown when attempting to register a duplicate login.
-	ErrAuthCredentialsIsNotValid = errors.New("login or password is not valid") // Raised when invalid credentials are presented during login.
+	ErrLoginAlreadyExists = errors.New("login already exists")           // Thrown when attempting to register a duplicate login.
+	ErrInvalidCredentials = errors.New("login or password is not valid") // Raised when invalid credentials are presented during login.
+	ErrUserNotFound       = errors.New("user not found")                 // Raised when attempting to authenticate a non-existent user.
 )
 
 // UsersService encapsulates user-related business logic, handling registration and authentication processes.
@@ -58,7 +59,7 @@ func (s *UsersService) Login(ctx context.Context, cond models.User) (int64, erro
 
 	err = s.c.IsEqual(cond.Password, result.Password)
 	if err != nil {
-		return -1, ErrAuthCredentialsIsNotValid
+		return -1, ErrInvalidCredentials
 	}
 
 	return result.ID, nil

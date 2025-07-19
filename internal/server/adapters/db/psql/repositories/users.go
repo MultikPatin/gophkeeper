@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -51,7 +50,7 @@ func (r *UsersRepository) Login(ctx context.Context, Login string) (*models.User
 	err := r.db.Conn.QueryRowContext(ctx, stmt.user.login, Login).Scan(&user.ID, &user.Login, &user.Password)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, fmt.Errorf("user not found")
+			return nil, services.ErrUserNotFound
 		}
 		return nil, err
 	}
