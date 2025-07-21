@@ -3,10 +3,7 @@ package cli
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"main/internal/client/cli/binaries"
-	"main/internal/client/cli/cards"
-	"main/internal/client/cli/passwords"
-	"main/internal/client/cli/users"
+	"main/internal/client/app/proto"
 	"os"
 )
 
@@ -18,10 +15,16 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
-	users.Init(rootCmd)
-	passwords.Init(rootCmd)
-	cards.Init(rootCmd)
-	binaries.Init(rootCmd)
+	client, _ := proto.NewGothKeeperClient("localhost:5050")
+	//if err != nil {
+	//	return nil, err
+	//}
+	defer client.Close()
+
+	rootCmd.AddCommand(SetupBinaryCommand(client))
+	rootCmd.AddCommand(SetupCardCommand(client))
+	rootCmd.AddCommand(SetupPasswordCommand(client))
+	rootCmd.AddCommand(SetupUserCommand(client))
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
