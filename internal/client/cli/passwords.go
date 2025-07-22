@@ -44,8 +44,12 @@ func addPassword(client *proto.GothKeeperClient) *cobra.Command {
 				Login:    login,
 				Password: password,
 			}
+			result, err := client.Passwords.Add(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Save object with title: ", result.Title)
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -80,8 +84,14 @@ func getPassword(client *proto.GothKeeperClient) *cobra.Command {
 			cond := pb.PasswordRequest{
 				Title: title,
 			}
+			result, err := client.Passwords.Get(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Get object with title: ", result.Title)
+			cmd.Print("Login: ", result.Login)
+			cmd.Print("Password: ", result.Password)
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -116,8 +126,12 @@ func updatePassword(client *proto.GothKeeperClient) *cobra.Command {
 				Login:    login,
 				Password: password,
 			}
+			result, err := client.Passwords.Update(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Update object with title: ", result.Title)
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -144,8 +158,12 @@ func removePassword(client *proto.GothKeeperClient) *cobra.Command {
 			cond := pb.PasswordRequest{
 				Title: title,
 			}
+			_, err = client.Passwords.Delete(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Delete object with title: ", title)
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")

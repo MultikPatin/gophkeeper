@@ -54,8 +54,12 @@ func addCard(client *proto.GothKeeperClient) *cobra.Command {
 				DataEnd:    dataEnd,
 				SecretCode: secretCode,
 			}
+			result, err := client.Cards.Add(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Save object with title: ", result.Title)
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -100,8 +104,17 @@ func getCard(client *proto.GothKeeperClient) *cobra.Command {
 			cond := pb.CardRequest{
 				Title: title,
 			}
+			result, err := client.Cards.Get(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Get object with title: ", result.Title)
+			cmd.Print("Bank name: ", result.Bank)
+			cmd.Print("Card number: ", result.Number)
+			cmd.Print("Date end: ", result.DataEnd)
+			cmd.Print("Secret code: ", result.SecretCode)
+
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -146,8 +159,12 @@ func updateCard(client *proto.GothKeeperClient) *cobra.Command {
 				DataEnd:    dataEnd,
 				SecretCode: secretCode,
 			}
+			result, err := client.Cards.Update(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Update object with title: ", result.Title)
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -176,8 +193,12 @@ func removeCard(client *proto.GothKeeperClient) *cobra.Command {
 			cond := pb.CardRequest{
 				Title: title,
 			}
+			_, err = client.Cards.Delete(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Delete object with title: ", title)
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")

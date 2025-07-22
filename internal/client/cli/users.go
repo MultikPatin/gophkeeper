@@ -37,8 +37,13 @@ func registerUser(client *proto.GothKeeperClient) *cobra.Command {
 				Login:    username,
 				Password: password,
 			}
+			result, err := client.Users.Register(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+			client.Token = result.Token
 
-			cmd.Print(cond)
+			cmd.Print("Successfully registered")
 		},
 	}
 	cmd.Flags().StringP("username", "u", "", "Username")
@@ -73,8 +78,13 @@ func logiUser(client *proto.GothKeeperClient) *cobra.Command {
 				Login:    username,
 				Password: password,
 			}
+			result, err := client.Users.Login(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+			client.Token = result.Token
 
-			cmd.Print(cond)
+			cmd.Print("Successfully logged in")
 		},
 	}
 	cmd.Flags().StringP("username", "u", "", "Username")

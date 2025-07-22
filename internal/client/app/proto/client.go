@@ -8,7 +8,7 @@ import (
 
 type GothKeeperClient struct {
 	conn      *grpc.ClientConn
-	Tokens    map[string]string
+	Token     string
 	Users     pb.UsersClient
 	Passwords pb.PasswordsClient
 	Cards     pb.CardsClient
@@ -21,11 +21,11 @@ func NewGothKeeperClient(GRPCAddr string) (*GothKeeperClient, error) {
 		return nil, err
 	}
 
-	userTokens := make(map[string]string, 1)
+	userToken := "token"
 
 	return &GothKeeperClient{
 		conn:      conn,
-		Tokens:    userTokens,
+		Token:     userToken,
 		Users:     pb.NewUsersClient(conn),
 		Passwords: pb.NewPasswordsClient(conn),
 		Cards:     pb.NewCardsClient(conn),

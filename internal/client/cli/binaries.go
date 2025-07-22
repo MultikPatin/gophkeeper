@@ -39,8 +39,12 @@ func addBinary(client *proto.GothKeeperClient) *cobra.Command {
 				Title: title,
 				Data:  binary,
 			}
+			result, err := client.Binaries.Add(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Save object with title: ", result.Title)
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -70,8 +74,13 @@ func getBinary(client *proto.GothKeeperClient) *cobra.Command {
 			cond := pb.BinariesRequest{
 				Title: title,
 			}
+			result, err := client.Binaries.Get(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Get object with title: ", result.Title)
+			cmd.Print("Binary data: ", result.Data)
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -101,8 +110,12 @@ func updateBinary(client *proto.GothKeeperClient) *cobra.Command {
 				Title: title,
 				Data:  binary,
 			}
+			result, err := client.Binaries.Update(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Update object with title: ", result.Title)
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -132,8 +145,12 @@ func removeBinary(client *proto.GothKeeperClient) *cobra.Command {
 			cond := pb.BinariesRequest{
 				Title: title,
 			}
+			_, err = client.Binaries.Delete(cmd.Context(), &cond)
+			if err != nil {
+				cmd.PrintErr(err)
+			}
 
-			cmd.Print(cond)
+			cmd.Print("Delete object with title: ", title)
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
