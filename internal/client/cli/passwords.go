@@ -3,6 +3,7 @@ package cli
 import (
 	"github.com/spf13/cobra"
 	"main/internal/client/app/proto"
+	pb "main/proto"
 )
 
 func SetupPasswordCommand(client *proto.GothKeeperClient) *cobra.Command {
@@ -25,8 +26,42 @@ func addPassword(client *proto.GothKeeperClient) *cobra.Command {
 		Short: "Add login password pair",
 		Long:  `Add login password pair.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// TODO: implement
+			title, err := cmd.Flags().GetString("title")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+			login, err := cmd.Flags().GetString("login")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+			password, err := cmd.Flags().GetString("password")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+
+			cond := pb.PasswordCreateRequest{
+				Title:    title,
+				Login:    login,
+				Password: password,
+			}
+
+			cmd.Print(cond)
 		},
+	}
+	cmd.Flags().StringP("title", "t", "", "Record title")
+	cmd.Flags().StringP("login", "l", "", "Login")
+	cmd.Flags().StringP("password", "p", "", "Password")
+	err := cmd.MarkFlagRequired("title")
+	if err != nil {
+		cmd.PrintErr(err)
+	}
+	err = cmd.MarkFlagRequired("login")
+	if err != nil {
+		cmd.PrintErr(err)
+	}
+	err = cmd.MarkFlagRequired("password")
+	if err != nil {
+		cmd.PrintErr(err)
 	}
 	return cmd
 }
@@ -37,8 +72,22 @@ func getPassword(client *proto.GothKeeperClient) *cobra.Command {
 		Short: "Get login password pair",
 		Long:  `Get login password pair.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// TODO: implement
+			title, err := cmd.Flags().GetString("title")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+
+			cond := pb.PasswordRequest{
+				Title: title,
+			}
+
+			cmd.Print(cond)
 		},
+	}
+	cmd.Flags().StringP("title", "t", "", "Record title")
+	err := cmd.MarkFlagRequired("title")
+	if err != nil {
+		cmd.PrintErr(err)
 	}
 	return cmd
 }
@@ -49,8 +98,34 @@ func updatePassword(client *proto.GothKeeperClient) *cobra.Command {
 		Short: "Update login password pair",
 		Long:  `Update login password pair.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// TODO: implement
+			title, err := cmd.Flags().GetString("title")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+			login, err := cmd.Flags().GetString("login")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+			password, err := cmd.Flags().GetString("password")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+
+			cond := pb.PasswordUpdateRequest{
+				Title:    title,
+				Login:    login,
+				Password: password,
+			}
+
+			cmd.Print(cond)
 		},
+	}
+	cmd.Flags().StringP("title", "t", "", "Record title")
+	cmd.Flags().StringP("login", "l", "", "Login")
+	cmd.Flags().StringP("password", "p", "", "Password")
+	err := cmd.MarkFlagRequired("title")
+	if err != nil {
+		cmd.PrintErr(err)
 	}
 	return cmd
 }
@@ -61,8 +136,23 @@ func removePassword(client *proto.GothKeeperClient) *cobra.Command {
 		Short: "Delete login password pair",
 		Long:  `Delete login password pair.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// TODO: implement
+			title, err := cmd.Flags().GetString("title")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+
+			cond := pb.PasswordRequest{
+				Title: title,
+			}
+
+			cmd.Print(cond)
 		},
 	}
+	cmd.Flags().StringP("title", "t", "", "Record title")
+	err := cmd.MarkFlagRequired("title")
+	if err != nil {
+		cmd.PrintErr(err)
+	}
+
 	return cmd
 }

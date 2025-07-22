@@ -3,6 +3,7 @@ package cli
 import (
 	"github.com/spf13/cobra"
 	"main/internal/client/app/proto"
+	pb "main/proto"
 )
 
 func SetupBinaryCommand(client *proto.GothKeeperClient) *cobra.Command {
@@ -25,8 +26,32 @@ func addBinary(client *proto.GothKeeperClient) *cobra.Command {
 		Short: "Add binary data",
 		Long:  `Add binary data.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// TODO: implement
+			title, err := cmd.Flags().GetString("title")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+			binary, err := cmd.Flags().GetBytesHex("binary")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+
+			cond := pb.BinariesCreateRequest{
+				Title: title,
+				Data:  binary,
+			}
+
+			cmd.Print(cond)
 		},
+	}
+	cmd.Flags().StringP("title", "t", "", "Record title")
+	cmd.Flags().StringP("binary", "b", "", "Binary data")
+	err := cmd.MarkFlagRequired("title")
+	if err != nil {
+		cmd.PrintErr(err)
+	}
+	err = cmd.MarkFlagRequired("binary")
+	if err != nil {
+		cmd.PrintErr(err)
 	}
 	return cmd
 }
@@ -37,8 +62,22 @@ func getBinary(client *proto.GothKeeperClient) *cobra.Command {
 		Short: "Get binary data",
 		Long:  `Get binary data.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// TODO: implement
+			title, err := cmd.Flags().GetString("title")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+
+			cond := pb.BinariesRequest{
+				Title: title,
+			}
+
+			cmd.Print(cond)
 		},
+	}
+	cmd.Flags().StringP("title", "t", "", "Record title")
+	err := cmd.MarkFlagRequired("title")
+	if err != nil {
+		cmd.PrintErr(err)
 	}
 	return cmd
 }
@@ -49,8 +88,32 @@ func updateBinary(client *proto.GothKeeperClient) *cobra.Command {
 		Short: "Update binary data",
 		Long:  `Update binary data.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// TODO: implement
+			title, err := cmd.Flags().GetString("title")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+			binary, err := cmd.Flags().GetBytesHex("binary")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+
+			cond := pb.BinariesUpdateRequest{
+				Title: title,
+				Data:  binary,
+			}
+
+			cmd.Print(cond)
 		},
+	}
+	cmd.Flags().StringP("title", "t", "", "Record title")
+	cmd.Flags().StringP("binary", "b", "", "Binary data")
+	err := cmd.MarkFlagRequired("title")
+	if err != nil {
+		cmd.PrintErr(err)
+	}
+	err = cmd.MarkFlagRequired("binary")
+	if err != nil {
+		cmd.PrintErr(err)
 	}
 	return cmd
 }
@@ -61,8 +124,22 @@ func removeBinary(client *proto.GothKeeperClient) *cobra.Command {
 		Short: "Delete binary data",
 		Long:  `Delete binary data.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// TODO: implement
+			title, err := cmd.Flags().GetString("title")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+
+			cond := pb.BinariesRequest{
+				Title: title,
+			}
+
+			cmd.Print(cond)
 		},
+	}
+	cmd.Flags().StringP("title", "t", "", "Record title")
+	err := cmd.MarkFlagRequired("title")
+	if err != nil {
+		cmd.PrintErr(err)
 	}
 	return cmd
 }

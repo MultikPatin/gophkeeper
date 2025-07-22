@@ -3,6 +3,7 @@ package cli
 import (
 	"github.com/spf13/cobra"
 	"main/internal/client/app/proto"
+	pb "main/proto"
 )
 
 func SetupUserCommand(client *proto.GothKeeperClient) *cobra.Command {
@@ -23,8 +24,32 @@ func registerUser(client *proto.GothKeeperClient) *cobra.Command {
 		Short: "Register User",
 		Long:  `Register User.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// TODO: implement
+			username, err := cmd.Flags().GetString("username")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+			password, err := cmd.Flags().GetString("password")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+
+			cond := pb.RegisterRequest{
+				Login:    username,
+				Password: password,
+			}
+
+			cmd.Print(cond)
 		},
+	}
+	cmd.Flags().StringP("username", "u", "", "Username")
+	cmd.Flags().StringP("password", "p", "", "Password")
+	err := cmd.MarkFlagRequired("username")
+	if err != nil {
+		cmd.PrintErr(err)
+	}
+	err = cmd.MarkFlagRequired("password")
+	if err != nil {
+		cmd.PrintErr(err)
 	}
 	return cmd
 }
@@ -35,8 +60,32 @@ func logiUser(client *proto.GothKeeperClient) *cobra.Command {
 		Short: "Login User",
 		Long:  `Login User.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// TODO: implement
+			username, err := cmd.Flags().GetString("username")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+			password, err := cmd.Flags().GetString("password")
+			if err != nil {
+				cmd.PrintErr(err)
+			}
+
+			cond := pb.LoginRequest{
+				Login:    username,
+				Password: password,
+			}
+
+			cmd.Print(cond)
 		},
+	}
+	cmd.Flags().StringP("username", "u", "", "Username")
+	cmd.Flags().StringP("password", "p", "", "Password")
+	err := cmd.MarkFlagRequired("username")
+	if err != nil {
+		cmd.PrintErr(err)
+	}
+	err = cmd.MarkFlagRequired("password")
+	if err != nil {
+		cmd.PrintErr(err)
 	}
 	return cmd
 }
