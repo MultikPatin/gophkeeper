@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"main/internal/client/app/proto"
 	"main/internal/client/cli"
+	"main/internal/client/config"
 	l "main/internal/logger"
 )
 
@@ -14,7 +16,14 @@ func main() {
 	logger := l.GetLogger()
 	defer l.SyncLogger()
 
-	logger.Info("Initializing client...")
+	c := config.Parse(logger)
 
-	cli.Execute()
+	client, err := proto.NewGothKeeperClient(c.GRPCAddr)
+	if err != nil {
+		logger.Fatalw(err.Error(), "event", "initialize client")
+		return
+	}
+	defer client.Close()
+
+	cli.Execute(client)
 }

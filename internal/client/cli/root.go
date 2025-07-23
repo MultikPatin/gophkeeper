@@ -14,13 +14,7 @@ var rootCmd = &cobra.Command{
 	login, passwords, binary data, and other private information.`,
 }
 
-func Execute() {
-	client, _ := proto.NewGothKeeperClient("localhost:5050")
-	//if err != nil {
-	//	return nil, err
-	//}
-	defer client.Close()
-
+func Execute(client *proto.GothKeeperClient) {
 	rootCmd.AddCommand(SetupBinaryCommand(client))
 	rootCmd.AddCommand(SetupCardCommand(client))
 	rootCmd.AddCommand(SetupPasswordCommand(client))

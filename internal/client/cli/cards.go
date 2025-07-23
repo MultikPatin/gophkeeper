@@ -2,10 +2,16 @@ package cli
 
 import (
 	"github.com/spf13/cobra"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 	"main/internal/client/app/proto"
 	pb "main/proto"
 )
 
+// SetupCardCommand configures the top-level command for managing bank cards.
+// It provides functionality for creating, reading, updating, and deleting bank card entries.
+// No error handling needed at this level as it merely organizes sub-commands.
 func SetupCardCommand(client *proto.GothKeeperClient) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "card",
@@ -20,6 +26,10 @@ func SetupCardCommand(client *proto.GothKeeperClient) *cobra.Command {
 	return cmd
 }
 
+// addCard manages the addition of a new bank card record.
+// It requires multiple parameters such as title, bank name, card number, expiration date, and security code.
+// The process involves sending these details to the backend via gRPC.
+// Potential errors include duplicated card records (`AlreadyExists`) and invalid/unauthorized tokens (`Unauthenticated`).
 func addCard(client *proto.GothKeeperClient) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "add",
@@ -54,12 +64,27 @@ func addCard(client *proto.GothKeeperClient) *cobra.Command {
 				DataEnd:    dataEnd,
 				SecretCode: secretCode,
 			}
-			result, err := client.Cards.Add(cmd.Context(), &cond)
-			if err != nil {
-				cmd.PrintErr(err)
-			}
 
-			cmd.Print("Save object with title: ", result.Title)
+			ctx := cmd.Context()
+			newCtx := metadata.NewOutgoingContext(ctx, metadata.Pairs("token", client.Token))
+
+			result, err := client.Cards.Add(newCtx, &cond)
+			if err != nil {
+				if st, ok := status.FromError(err); ok {
+					switch st.Code() {
+					case codes.AlreadyExists:
+						cmd.Print("Card already exists")
+					case codes.Unauthenticated:
+						cmd.Print("invalid token")
+					default:
+						cmd.Println("Error:", st.Message())
+					}
+				} else {
+					cmd.PrintErrf("Error: %v", err)
+				}
+			} else {
+				cmd.Print("Save object with title: ", result.Title)
+			}
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -90,6 +115,9 @@ func addCard(client *proto.GothKeeperClient) *cobra.Command {
 	return cmd
 }
 
+// getCard retrieves details about a bank card given its title.
+// It communicates with the gRPC server to fetch the requested card’s attributes.
+// Potential issues include an invalid token (`Unauthenticated`) or a missing card record (`NotFound`).
 func getCard(client *proto.GothKeeperClient) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get",
@@ -104,17 +132,31 @@ func getCard(client *proto.GothKeeperClient) *cobra.Command {
 			cond := pb.CardRequest{
 				Title: title,
 			}
-			result, err := client.Cards.Get(cmd.Context(), &cond)
+
+			ctx := cmd.Context()
+			newCtx := metadata.NewOutgoingContext(ctx, metadata.Pairs("token", client.Token))
+
+			result, err := client.Cards.Get(newCtx, &cond)
 			if err != nil {
-				cmd.PrintErr(err)
+				if st, ok := status.FromError(err); ok {
+					switch st.Code() {
+					case codes.NotFound:
+						cmd.Print("Card not found")
+					case codes.Unauthenticated:
+						cmd.Print("invalid token")
+					default:
+						cmd.Println("Error:", st.Message())
+					}
+				} else {
+					cmd.PrintErrf("Error: %v", err)
+				}
+			} else {
+				cmd.Print("Get object with title: ", result.Title)
+				cmd.Print("Bank: ", result.Bank)
+				cmd.Print("Card number: ", result.Number)
+				cmd.Print("Date end: ", result.DataEnd)
+				cmd.Print("Secret code: ", result.SecretCode)
 			}
-
-			cmd.Print("Get object with title: ", result.Title)
-			cmd.Print("Bank name: ", result.Bank)
-			cmd.Print("Card number: ", result.Number)
-			cmd.Print("Date end: ", result.DataEnd)
-			cmd.Print("Secret code: ", result.SecretCode)
-
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -125,6 +167,9 @@ func getCard(client *proto.GothKeeperClient) *cobra.Command {
 	return cmd
 }
 
+// updateCard modifies an existing bank card record by its title.
+// It expects several inputs (like bank name, card number, expiration date, and security code), which are then sent to the gRPC server.
+// Common errors include a non-existent card (`NotFound`) or failed authentication (`Unauthenticated`).
 func updateCard(client *proto.GothKeeperClient) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update",
@@ -159,12 +204,27 @@ func updateCard(client *proto.GothKeeperClient) *cobra.Command {
 				DataEnd:    dataEnd,
 				SecretCode: secretCode,
 			}
-			result, err := client.Cards.Update(cmd.Context(), &cond)
-			if err != nil {
-				cmd.PrintErr(err)
-			}
 
-			cmd.Print("Update object with title: ", result.Title)
+			ctx := cmd.Context()
+			newCtx := metadata.NewOutgoingContext(ctx, metadata.Pairs("token", client.Token))
+
+			result, err := client.Cards.Update(newCtx, &cond)
+			if err != nil {
+				if st, ok := status.FromError(err); ok {
+					switch st.Code() {
+					case codes.NotFound:
+						cmd.Print("Card not found")
+					case codes.Unauthenticated:
+						cmd.Print("invalid token")
+					default:
+						cmd.Println("Error:", st.Message())
+					}
+				} else {
+					cmd.PrintErrf("Error: %v", err)
+				}
+			} else {
+				cmd.Print("Update object with title: ", result.Title)
+			}
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")
@@ -179,6 +239,9 @@ func updateCard(client *proto.GothKeeperClient) *cobra.Command {
 	return cmd
 }
 
+// removeCard removes a bank card record specified by its title.
+// It makes use of gRPC to perform the deletion action.
+// Possible problems include incorrect authentication (`Unauthenticated`) or absence of the target card (`NotFound`).
 func removeCard(client *proto.GothKeeperClient) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "remove",
@@ -193,12 +256,27 @@ func removeCard(client *proto.GothKeeperClient) *cobra.Command {
 			cond := pb.CardRequest{
 				Title: title,
 			}
-			_, err = client.Cards.Delete(cmd.Context(), &cond)
-			if err != nil {
-				cmd.PrintErr(err)
-			}
 
-			cmd.Print("Delete object with title: ", title)
+			ctx := cmd.Context()
+			newCtx := metadata.NewOutgoingContext(ctx, metadata.Pairs("token", client.Token))
+
+			_, err = client.Cards.Delete(newCtx, &cond)
+			if err != nil {
+				if st, ok := status.FromError(err); ok {
+					switch st.Code() {
+					case codes.NotFound:
+						cmd.Print("Card not found")
+					case codes.Unauthenticated:
+						cmd.Print("invalid token")
+					default:
+						cmd.Println("Error:", st.Message())
+					}
+				} else {
+					cmd.PrintErrf("Error: %v", err)
+				}
+			} else {
+				cmd.Print("Successfully deleted")
+			}
 		},
 	}
 	cmd.Flags().StringP("title", "t", "", "Record title")

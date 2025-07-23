@@ -1,8 +1,7 @@
 package main
 
-// Глобальные переменные версии сборки
 var (
-	buildVersion = "N/A" // Версия билда
-	buildDate    = "N/A" // Дата компиляции
-	buildCommit  = "N/A" // SHA коммита Git
+	buildVersion = "N/A" // Default version placeholder; updated at compile time via ldflags.
+	buildDate    = "N/A" // Build date; populated automatically using go build flags.
+	buildCommit  = "NAA" // Commit hash; retrieved from git repository at build time.
 )
