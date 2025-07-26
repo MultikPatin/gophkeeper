@@ -21,7 +21,6 @@ func main() {
 	client, err := proto.NewGothKeeperClient(c.GRPCAddr)
 	if err != nil {
 		logger.Fatalw(err.Error(), "event", "initialize client")
-		return
 	}
 	defer client.Close()
 

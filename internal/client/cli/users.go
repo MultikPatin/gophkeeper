@@ -2,8 +2,6 @@ package cli
 
 import (
 	"github.com/spf13/cobra"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"main/internal/client/app/proto"
 	pb "main/proto"
 )
@@ -18,7 +16,7 @@ func SetupUserCommand(client *proto.GothKeeperClient) *cobra.Command {
 		authorization and registration based on JWT tokens`,
 	}
 	cmd.AddCommand(registerUser(client))
-	cmd.AddCommand(logiUser(client))
+	cmd.AddCommand(loginUser(client))
 	return cmd
 }
 
@@ -48,16 +46,7 @@ func registerUser(client *proto.GothKeeperClient) *cobra.Command {
 
 			result, err := client.Users.Register(cmd.Context(), &cond)
 			if err != nil {
-				if st, ok := status.FromError(err); ok {
-					switch st.Code() {
-					case codes.AlreadyExists:
-						cmd.Print("User already exists")
-					default:
-						cmd.Println("Error:", st.Message())
-					}
-				} else {
-					cmd.PrintErrf("Error: %v", err)
-				}
+				dispatchErrors(cmd, err)
 			} else {
 				client.Token = result.Token
 				cmd.Print("Successfully registered")
@@ -77,11 +66,11 @@ func registerUser(client *proto.GothKeeperClient) *cobra.Command {
 	return cmd
 }
 
-// logiUser creates a new Cobra command to handle user login.
+// loginUser creates a new Cobra command to handle user login.
 // It retrieves flags from the CLI input, constructs a LoginRequest protobuf message,
 // sends it to the gRPC server, and handles potential errors including GRPC-specific ones like NotFound and Unauthenticated.
 // If successful, it prints a success message and stores the returned token in the client instance.
-func logiUser(client *proto.GothKeeperClient) *cobra.Command {
+func loginUser(client *proto.GothKeeperClient) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "login",
 		Short: "Login User",
@@ -103,18 +92,7 @@ func logiUser(client *proto.GothKeeperClient) *cobra.Command {
 
 			result, err := client.Users.Login(cmd.Context(), &cond)
 			if err != nil {
-				if st, ok := status.FromError(err); ok {
-					switch st.Code() {
-					case codes.NotFound:
-						cmd.Print("User not found")
-					case codes.Unauthenticated:
-						cmd.Print("Incorrect password or username")
-					default:
-						cmd.Println("Error:", st.Message())
-					}
-				} else {
-					cmd.PrintErrf("Error: %v", err)
-				}
+				dispatchErrors(cmd, err)
 			} else {
 				client.Token = result.Token
 				cmd.Print("Successfully registered")

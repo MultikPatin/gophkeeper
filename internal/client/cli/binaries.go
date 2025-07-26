@@ -2,9 +2,7 @@ package cli
 
 import (
 	"github.com/spf13/cobra"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 	"main/internal/client/app/proto"
 	pb "main/proto"
 )
@@ -57,18 +55,7 @@ func addBinary(client *proto.GothKeeperClient) *cobra.Command {
 
 			result, err := client.Binaries.Add(newCtx, &cond)
 			if err != nil {
-				if st, ok := status.FromError(err); ok {
-					switch st.Code() {
-					case codes.AlreadyExists:
-						cmd.Print("Binary already exists")
-					case codes.Unauthenticated:
-						cmd.Print("invalid token")
-					default:
-						cmd.Println("Error:", st.Message())
-					}
-				} else {
-					cmd.PrintErrf("Error: %v", err)
-				}
+				dispatchErrors(cmd, err)
 			} else {
 				cmd.Print("Save object with title: ", result.Title)
 			}
@@ -110,18 +97,7 @@ func getBinary(client *proto.GothKeeperClient) *cobra.Command {
 
 			result, err := client.Binaries.Get(newCtx, &cond)
 			if err != nil {
-				if st, ok := status.FromError(err); ok {
-					switch st.Code() {
-					case codes.NotFound:
-						cmd.Print("Binary not found")
-					case codes.Unauthenticated:
-						cmd.Print("invalid token")
-					default:
-						cmd.Println("Error:", st.Message())
-					}
-				} else {
-					cmd.PrintErrf("Error: %v", err)
-				}
+				dispatchErrors(cmd, err)
 			} else {
 				cmd.Print("Get object with title: ", result.Title)
 				cmd.Print("Binary data: ", result.Data)
@@ -164,18 +140,7 @@ func updateBinary(client *proto.GothKeeperClient) *cobra.Command {
 
 			result, err := client.Binaries.Update(newCtx, &cond)
 			if err != nil {
-				if st, ok := status.FromError(err); ok {
-					switch st.Code() {
-					case codes.NotFound:
-						cmd.Print("Binary not found")
-					case codes.Unauthenticated:
-						cmd.Print("invalid token")
-					default:
-						cmd.Println("Error:", st.Message())
-					}
-				} else {
-					cmd.PrintErrf("Error: %v", err)
-				}
+				dispatchErrors(cmd, err)
 			} else {
 				cmd.Print("Update object with title: ", result.Title)
 			}
@@ -217,18 +182,7 @@ func removeBinary(client *proto.GothKeeperClient) *cobra.Command {
 
 			_, err = client.Binaries.Delete(newCtx, &cond)
 			if err != nil {
-				if st, ok := status.FromError(err); ok {
-					switch st.Code() {
-					case codes.NotFound:
-						cmd.Print("Binary not found")
-					case codes.Unauthenticated:
-						cmd.Print("invalid token")
-					default:
-						cmd.Println("Error:", st.Message())
-					}
-				} else {
-					cmd.PrintErrf("Error: %v", err)
-				}
+				dispatchErrors(cmd, err)
 			} else {
 				cmd.Print("Successfully deleted")
 			}

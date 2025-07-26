@@ -3,6 +3,8 @@ package cli
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"main/internal/client/app/proto"
 	"os"
 )
@@ -23,5 +25,22 @@ func Execute(client *proto.GothKeeperClient) {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
+	}
+}
+
+func dispatchErrors(cmd *cobra.Command, err error) {
+	if st, ok := status.FromError(err); ok {
+		switch st.Code() {
+		case codes.AlreadyExists:
+			cmd.Print("Entity already exists")
+		case codes.NotFound:
+			cmd.Print("Entity not found")
+		case codes.Unauthenticated:
+			cmd.Print("invalid token")
+		default:
+			cmd.Println("Error:", st.Message())
+		}
+	} else {
+		cmd.PrintErrf("Error: %v", err)
 	}
 }

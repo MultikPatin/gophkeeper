@@ -2,9 +2,7 @@ package cli
 
 import (
 	"github.com/spf13/cobra"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 	"main/internal/client/app/proto"
 	pb "main/proto"
 )
@@ -70,18 +68,7 @@ func addCard(client *proto.GothKeeperClient) *cobra.Command {
 
 			result, err := client.Cards.Add(newCtx, &cond)
 			if err != nil {
-				if st, ok := status.FromError(err); ok {
-					switch st.Code() {
-					case codes.AlreadyExists:
-						cmd.Print("Card already exists")
-					case codes.Unauthenticated:
-						cmd.Print("invalid token")
-					default:
-						cmd.Println("Error:", st.Message())
-					}
-				} else {
-					cmd.PrintErrf("Error: %v", err)
-				}
+				dispatchErrors(cmd, err)
 			} else {
 				cmd.Print("Save object with title: ", result.Title)
 			}
@@ -138,18 +125,7 @@ func getCard(client *proto.GothKeeperClient) *cobra.Command {
 
 			result, err := client.Cards.Get(newCtx, &cond)
 			if err != nil {
-				if st, ok := status.FromError(err); ok {
-					switch st.Code() {
-					case codes.NotFound:
-						cmd.Print("Card not found")
-					case codes.Unauthenticated:
-						cmd.Print("invalid token")
-					default:
-						cmd.Println("Error:", st.Message())
-					}
-				} else {
-					cmd.PrintErrf("Error: %v", err)
-				}
+				dispatchErrors(cmd, err)
 			} else {
 				cmd.Print("Get object with title: ", result.Title)
 				cmd.Print("Bank: ", result.Bank)
@@ -210,18 +186,7 @@ func updateCard(client *proto.GothKeeperClient) *cobra.Command {
 
 			result, err := client.Cards.Update(newCtx, &cond)
 			if err != nil {
-				if st, ok := status.FromError(err); ok {
-					switch st.Code() {
-					case codes.NotFound:
-						cmd.Print("Card not found")
-					case codes.Unauthenticated:
-						cmd.Print("invalid token")
-					default:
-						cmd.Println("Error:", st.Message())
-					}
-				} else {
-					cmd.PrintErrf("Error: %v", err)
-				}
+				dispatchErrors(cmd, err)
 			} else {
 				cmd.Print("Update object with title: ", result.Title)
 			}
@@ -262,18 +227,7 @@ func removeCard(client *proto.GothKeeperClient) *cobra.Command {
 
 			_, err = client.Cards.Delete(newCtx, &cond)
 			if err != nil {
-				if st, ok := status.FromError(err); ok {
-					switch st.Code() {
-					case codes.NotFound:
-						cmd.Print("Card not found")
-					case codes.Unauthenticated:
-						cmd.Print("invalid token")
-					default:
-						cmd.Println("Error:", st.Message())
-					}
-				} else {
-					cmd.PrintErrf("Error: %v", err)
-				}
+				dispatchErrors(cmd, err)
 			} else {
 				cmd.Print("Successfully deleted")
 			}
